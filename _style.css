@@ -1,0 +1,46 @@
+BODY {font-family: "Verdana", sans-serif; font-size: 9pt; background-color: #29200f; text-align: left; margin: 0 px; color: #29200f; line-height: 14pt;}
+TABLE {font-family: "Verdana", sans-serif; font-size: 9pt; text-align: left; color: #29200f; line-height: 14pt;}
+TD {font-family: "Verdana", sans-serif; font-size: 9pt; color: #29200f; line-height: 14pt;}
+
+
+A.meni1a, A.meni1a:link, A.meni1a:visited {text-decoration: none; font-size: 9pt; color: #ded79f; font-weight: bold;}
+A.meni1a:hover {text-decoration: none; color: #be7b72;}
+
+A.meni1b, A.meni1b:link, A.meni1b:visited {text-decoration: none; font-size: 9pt; color: white; font-weight: bold;}
+A.meni1b:hover {text-decoration: none; color: #be7b72;}
+
+P {text-indent: 0px; line-height: 14pt; text-align: justify;}
+P.leftbrez {text-indent: 0px; margin-bottom: 0px; line-height: 14pt;}
+P.right {text-align: right; line-height: 14pt;}
+P.right_brez {text-align: right; margin-top: 0px; line-height: 14pt;}
+P.center {text-align: center; line-height: 14pt;}
+P.prva {text-indent: 0px; line-height: 11pt; text-align: left;}
+
+H1 {font-family: "Verdana", sans-serif; font-size: 14pt; color: #600804; line-height: 18pt; font-weight: bold;}
+H2 {font-family: "Verdana", sans-serif; font-size: 10pt; color: #600804; line-height: 12pt; font-weight: bold;}
+
+TEXTAREA, INPUT, OPTION, SELECT, IFRAME {font-family: "Verdana", sans-serif; font-size: 9pt; line-height: 12pt; border: 1px #afa689 solid; background-color: #bdb497;}
+
+UL, OL {margin-top: 0px; line-height: 14pt;}
+LI {line-height: 14pt;}
+BLOCKQUOTE {margin-top: 0px; margin-left: 20px;}
+
+A, A:link, A:visited {text-decoration: underline; color: #824435;}
+A:hover {text-decoration: none;}
+
+.footer {color: #ded79f;}
+A.footer, A.footer:link, A.footer:visited {text-decoration: none; color: #ded79f;}
+A.footer:hover {text-decoration: underline;}
+
+.topbrez {margin-top: 0px;}
+.brez {margin: 0em 0em 0em 1.5em;}
+
+.linija {background-color: #600804;}
+.slikaback {background-color: #bdb497;}
+
+.ok {color: green; font-weight: bold;}
+.error {color: #db4f32; font-weight: bold;}
+
+.slika {border: 1px #afa689 solid;}
+
+.small {font-size: 8pt;}
