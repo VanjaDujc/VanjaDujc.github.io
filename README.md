@@ -56,9 +56,10 @@ background close to `#ebe3cc` – or change `--photo-bg` to match the new backgr
 
 `public/images/map/dolga-reber.jpg` is a picture made from OpenStreetMap (the credit under the
 map is required by its licence). Clicking it opens Google Maps with the address, so navigation
-always finds the exact house. The **pin position is an estimate** (OpenStreetMap has no house
-numbers for Dolga reber). To move it, change `CONTACT.pin` (latitude, longitude) in
-`src/i18n.ts`; the picture itself doesn't need to change as long as the spot is inside it.
+always finds the exact house. The pin uses the coordinates Google Maps gives for Dolga reber 4
+(OpenStreetMap has no house numbers there). To move it, change `CONTACT.pin` (latitude,
+longitude) in `src/i18n.ts`; the picture is centred on the house, and only needs to be made
+again if the pin moves far away.
 
 ## Still to do
 

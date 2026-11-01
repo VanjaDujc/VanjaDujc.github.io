@@ -56,9 +56,9 @@ export const CONTACT = {
   // clicking the map opens Google Maps with the address (Google finds the exact house)
   mapUrl: 'https://www.google.com/maps/search/?api=1&query=Dolga+reber+4%2C+6000+Koper%2C+Slovenia',
   // map picture made from OpenStreetMap: its centre, zoom level and size in pixels
-  map: { image: '/images/map/dolga-reber.jpg', lat: 45.5463, lon: 13.7037, zoom: 17, width: 1200, height: 750 },
-  // position of the pin on the map; ESTIMATED from the old site's map, move it if the house is elsewhere
-  pin: { lat: 45.5463, lon: 13.7037 },
+  map: { image: '/images/map/dolga-reber.jpg', lat: 45.546372, lon: 13.7072177, zoom: 17, width: 1200, height: 750 },
+  // position of the pin on the map (Dolga reber 4 as Google Maps shows it)
+  pin: { lat: 45.546372, lon: 13.7072177 },
 };
 
 export function localePrefix(locale: Locale): string {
