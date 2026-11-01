@@ -39,6 +39,19 @@ npm run dev
 Languages: `sl` is the main language at `/`, the others are at `/en/`, `/de/`, `/it/`.
 A product, recipe or news item that has no file in a language is simply not shown in that language.
 
+## Placeholder product photos
+
+The photos in `public/images/products/` are **temporary**. They are the old site's photos,
+edited so they fit the new design: background shifted to one light beige (`#ebe3cc`, the
+`--photo-bg` colour in `src/styles/site.css`), dark tones lifted, product cropped and placed
+at the same size on a 600×720 canvas. `maurino.jpg`, `leccino.jpg` and `istrska-belica.jpg`
+were cut out of the four-bottle photo; Itrana has no photo of its own yet
+(`single-varietal-oils.jpg` is the four-bottle photo).
+
+Replace them with new photos when they exist. For the shop look, new photos should be
+**600×720 (or larger, same 5:6 shape)**, product standing near the bottom, on a plain
+background close to `#ebe3cc` – or change `--photo-bg` to match the new background.
+
 ## Still to do
 
 - New GitHub account/repository: update `backend.repo` in `public/admin/config.yml`.

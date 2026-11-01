@@ -39,6 +39,7 @@ const site = Astro.site ?? Astro.url;
     <title>{pageTitle}</title>
     <meta name="description" content={description || t.siteTitle} />
     <meta name="theme-color" content="#29200f" />
+    <meta name="color-scheme" content="only light" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="canonical" href={new URL(Astro.url.pathname, site)} />
     {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(alternates[l], site)} />)}
