@@ -1,0 +1,13 @@
+---
+// Renders a Markdown text field (e.g. the products sidebar or the footer).
+import { marked } from 'marked';
+
+interface Props {
+  text?: string;
+  inline?: boolean;
+}
+const { text = '', inline = false } = Astro.props;
+const html = inline ? marked.parseInline(text) : marked.parse(text);
+---
+
+<Fragment set:html={html} />

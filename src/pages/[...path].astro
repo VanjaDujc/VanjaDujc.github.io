@@ -1,0 +1,374 @@
+---
+// Builds every page in every language from the content in src/content.
+// A product, recipe or news item that has no file in a language simply doesn't exist there.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { marked } from 'marked';
+import Base from '../layouts/Base.astro';
+import Markdown from '../components/Markdown.astro';
+import ProductList from '../components/ProductList.astro';
+import {
+  LOCALES,
+  PAGE_PATHS,
+  formatDate,
+  localePrefix,
+  localeUrl,
+  pageUrl,
+  splitId,
+  ui,
+  type Locale,
+  type PageKey,
+} from '../i18n';
+
+type Route = {
+  key: string;
+  locale: Locale;
+  path: string;
+  view: PageKey | 'product' | 'recipe' | 'newsItem';
+  entry: CollectionEntry<'pages' | 'products' | 'recipes' | 'news'>;
+};
+
+export async function getStaticPaths() {
+  const routes: Route[] = [];
+  for (const entry of await getCollection('pages')) {
+    const { locale, slug } = splitId(entry.id);
+    if (!(slug in PAGE_PATHS)) continue;
+    const page = slug as PageKey;
+    routes.push({ key: `page:${page}`, locale, path: PAGE_PATHS[page], view: page, entry });
+  }
+  const details = [
+    ['products', 'product'],
+    ['recipes', 'recipe'],
+    ['news', 'newsItem'],
+  ] as const;
+  for (const [collection, view] of details) {
+    for (const entry of await getCollection(collection)) {
+      const { locale, slug } = splitId(entry.id);
+      routes.push({ key: `${view}:${slug}`, locale, path: `${collection}/${slug}/`, view, entry });
+    }
+  }
+
+  return routes.map((route) => {
+    const alternates = Object.fromEntries(
+      LOCALES.map((l) => {
+        const match = routes.find((r) => r.key === route.key && r.locale === l);
+        return [l, match ? localeUrl(l, match.path) : localePrefix(l)];
+      }),
+    ) as Record<Locale, string>;
+    const url = localeUrl(route.locale, route.path);
+    return {
+      params: { path: url.replace(/^\/|\/$/g, '') || undefined },
+      props: { route, alternates },
+    };
+  });
+}
+
+const { route, alternates } = Astro.props as { route: Route; alternates: Record<Locale, string> };
+const { locale, view, entry } = route;
+const t = ui[locale];
+
+const ofLocale = <T extends { id: string }>(items: T[]) => items.filter((e) => splitId(e.id).locale === locale);
+const pageEntry = async (page: PageKey) =>
+  (await getCollection('pages')).find((p) => p.id === `${locale}/${page}`) as CollectionEntry<'pages'>;
+const excerpt = (markdown = '', length = 230) => {
+  const text = (marked.parse(markdown) as string)
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&(#39|quot|amp|lt|gt);/g, (m, e) => ({ '#39': "'", quot: '"', amp: '&', lt: '<', gt: '>' })[e as string]!)
+    .replace(/\s+/g, ' ')
+    .trim();
+  return text.length > length ? text.slice(0, text.lastIndexOf(' ', length)) : text;
+};
+
+const { Content, headings } = await render(entry);
+
+// Fixed page data, and for detail pages the page they belong to (for heading, menu and side photo)
+const parentPage: Record<string, PageKey> = { product: 'products', recipe: 'recipes', newsItem: 'news' };
+const page = view in parentPage ? await pageEntry(parentPage[view]) : (entry as CollectionEntry<'pages'>);
+const activeMenu: PageKey =
+  view === 'product' ? 'products' : view === 'recipe' ? 'recipes' : view in PAGE_PATHS ? (view as PageKey) : 'home';
+const menuFor: Partial<Record<string, PageKey>> = { about: 'home', news: 'home', gallery: 'home', newsItem: 'home' };
+
+const news = ofLocale(await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const recipes = ofLocale(await getCollection('recipes')).sort((a, b) => a.data.order - b.data.order);
+const awards = await Promise.all(
+  ofLocale(await getCollection('awards'))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(async (a) => ({ ...a, Content: (await render(a)).Content })),
+);
+const latest = news[0];
+const newsUrl = (n: CollectionEntry<'news'>) => localeUrl(locale, `news/${splitId(n.id).slug}/`);
+
+const title = entry.data.title;
+---
+
+<Base
+  locale={locale}
+  title={title}
+  description={'description' in entry.data ? entry.data.description : undefined}
+  alternates={alternates}
+  activeMenu={menuFor[view] ?? activeMenu}
+  sideImage={view === 'product' ? undefined : page.data.sideImage}
+  asideFirst={view === 'product'}
+>
+  {
+    view === 'product' && (
+      <Fragment slot="aside">
+        <div class="product-box">
+          <p class="name">{entry.data.title}</p>
+          {'size' in entry.data && entry.data.size && <p class="size">{entry.data.size}</p>}
+          {'images' in entry.data && entry.data.images[0] && (
+            <img src={entry.data.images[0]} alt={entry.data.title} width="360" height="360" />
+          )}
+          {'images' in entry.data && entry.data.images.length > 1 && (
+            <div class="more-images">
+              {entry.data.images.slice(1).map((src) => (
+                <img src={src} alt={entry.data.title} loading="lazy" />
+              ))}
+            </div>
+          )}
+        </div>
+        <Content />
+      </Fragment>
+    )
+  }
+  {
+    view === 'products' && page.data.sidebar && (
+      <Fragment slot="aside">
+        <Markdown text={page.data.sidebar} />
+      </Fragment>
+    )
+  }
+
+  {
+    view === 'home' && (
+      <>
+        <h1>{page.data.title}</h1>
+        <div class="teaser">
+          {page.data.introImage && (
+            <a href={pageUrl(locale, 'about')}>
+              <img src={page.data.introImage} alt="" width="125" height="75" />
+            </a>
+          )}
+          <div class="text">
+            <p>{page.data.intro}</p>
+            <p class="right">
+              <a href={pageUrl(locale, 'about')}>{t.more}</a>
+            </p>
+          </div>
+        </div>
+        <Content />
+
+        {latest && (
+          <>
+            <hr />
+            <h1>{page.data.newsTitle}</h1>
+            <p>
+              <a class="latest-title" href={newsUrl(latest)}>
+                {latest.data.title}
+              </a>
+            </p>
+            <p>
+              {excerpt(latest.body)} <a href={newsUrl(latest)}>...</a>
+              <br />
+              {formatDate(latest.data.date)}
+            </p>
+            <p class="right">
+              <a href={newsUrl(latest)}>{t.more}</a>
+              <br />
+              <a href={pageUrl(locale, 'news')}>{t.otherNews}</a>
+            </p>
+          </>
+        )}
+
+        {page.data.galleryTitle && (
+          <>
+            <hr />
+            <h1>{page.data.galleryTitle}</h1>
+            <div class="teaser">
+              {page.data.galleryImage && (
+                <a href={pageUrl(locale, 'gallery')}>
+                  <img src={page.data.galleryImage} alt="" width="125" height="75" />
+                </a>
+              )}
+              <div class="text">
+                {page.data.galleryText && <p>{page.data.galleryText}</p>}
+                <p class="right">
+                  <a href={pageUrl(locale, 'gallery')}>{t.more}</a>
+                </p>
+              </div>
+            </div>
+          </>
+        )}
+      </>
+    )
+  }
+
+  {
+    view === 'products' && (
+      <>
+        <h1>{title}</h1>
+        <ProductList locale={locale} />
+        <hr />
+        <Content />
+      </>
+    )
+  }
+
+  {
+    view === 'product' && (
+      <>
+        <h1>{page.data.title}</h1>
+        <ProductList locale={locale} current={splitId(entry.id).slug} />
+      </>
+    )
+  }
+
+  {
+    view === 'awards' && (
+      <>
+        <h1>{title}</h1>
+        <Content />
+        <table class="awards">
+          <tbody>
+            {awards.map((a) => (
+              <tr>
+                <td class="logo">
+                  {a.data.logo &&
+                    (a.data.url ? (
+                      <a href={a.data.url}>
+                        <img src={a.data.logo} alt={a.data.title} />
+                      </a>
+                    ) : (
+                      <img src={a.data.logo} alt={a.data.title} />
+                    ))}
+                </td>
+                <td class="name">{a.data.title}</td>
+                <td class="results">
+                  <a.Content />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    )
+  }
+
+  {
+    view === 'faq' && (
+      <>
+        <h1>{title}</h1>
+        <ul class="faq-index">
+          {headings
+            .filter((h) => h.depth === 3)
+            .map((h) => (
+              <li>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+        </ul>
+        <hr />
+        <Content />
+        <p class="right small">
+          <a href="#top">{t.backToTop}</a>
+        </p>
+      </>
+    )
+  }
+
+  {
+    view === 'gallery' && (
+      <>
+        <h1>{title}</h1>
+        <Content />
+        <ul class="gallery">
+          {(page.data.images ?? []).map((img) => (
+            <li>
+              <figure>
+                <a href={img.image}>
+                  <img src={img.image} alt={img.caption ?? ''} loading="lazy" />
+                </a>
+                {img.caption && <figcaption>{img.caption}</figcaption>}
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {
+    view === 'recipes' && (
+      <>
+        <h1>{title}</h1>
+        <Content />
+        <ul class="recipe-list">
+          {recipes.map((r) => (
+            <li>
+              <a href={localeUrl(locale, `recipes/${splitId(r.id).slug}/`)}>{r.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {
+    view === 'recipe' && (
+      <>
+        <h1>{page.data.title}</h1>
+        <p class="right">
+          <a href={pageUrl(locale, 'recipes')}>{t.back}</a>
+        </p>
+        <h2>{title}</h2>
+        <Content />
+      </>
+    )
+  }
+
+  {
+    view === 'news' && (
+      <>
+        <h1>{title}</h1>
+        <Content />
+        <ul class="item-list">
+          {news.map((n) => (
+            <li>
+              <a class="item-title" href={newsUrl(n)}>
+                {n.data.title}
+              </a>
+              <br />
+              {excerpt(n.body, 160)} <a href={newsUrl(n)}>...</a>
+              <br />
+              {formatDate(n.data.date)}
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+
+  {
+    view === 'newsItem' && (
+      <>
+        <h1>{page.data.title}</h1>
+        <p>
+          <strong>{title}</strong>
+        </p>
+        <Content />
+        <p>{formatDate((entry as CollectionEntry<'news'>).data.date)}</p>
+        <p class="right">
+          <a href={pageUrl(locale, 'news')}>{t.otherNews}</a>
+        </p>
+      </>
+    )
+  }
+
+  {
+    ['about', 'press', 'contact', 'links'].includes(view) && (
+      <>
+        <h1>{title}</h1>
+        <Content />
+      </>
+    )
+  }
+</Base>

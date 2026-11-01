@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.env
+.DS_Store
+Thumbs.db
+
+# old DVD videos, kept locally only (too large for git)
+_old-videos/
+
+# personal Claude Code settings
+.claude/settings.local.json

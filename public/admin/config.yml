@@ -1,0 +1,244 @@
+# Sveltia CMS configuration - the editing screen at /admin/
+# Docs: https://sveltiacms.app/en/docs
+# Fields here must match src/content.config.ts.
+
+backend:
+  name: github
+  # Change to the new GitHub repository once the account is set up.
+  repo: VanjaDujc/VanjaDujc.github.io
+  branch: main
+  # For online editing (not needed for local editing) add the login helper URL here:
+  # base_url: https://sveltia-cms-auth.<your-subdomain>.workers.dev
+
+site_url: https://www.vanjadujc.net
+display_url: https://www.vanjadujc.net
+
+media_folder: /public/images
+public_folder: /images
+
+# Photos uploaded through the editor are shrunk and converted to WebP automatically
+media_libraries:
+  default:
+    config:
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 1600
+          height: 1600
+
+output:
+  omit_empty_optional_fields: true
+
+i18n:
+  structure: multiple_folders
+  locales: [sl, en, de, it]
+  default_locale: sl
+
+collections:
+  # ---------------------------------------------------------------- Products
+  - name: products
+    label: Izdelki
+    label_singular: Izdelek
+    description: Izdelki na strani "Kaj nudimo". Izdelek brez prevoda se v tistem jeziku ne prikaže.
+    folder: src/content/products
+    create: true
+    i18n: true
+    slug:
+      editable: [create]
+      hint: Kratko ime za spletni naslov, v angleščini, npr. lemon-oil
+    summary: "{{title}}"
+    sortable_fields: [order, title]
+    media_folder: /public/images/products
+    public_folder: /images/products
+    fields:
+      - { label: Naziv, name: title, widget: string, i18n: true }
+      - label: Skupina
+        name: category
+        widget: select
+        i18n: duplicate
+        options:
+          - { label: Osnovni program, value: basic }
+          - { label: Dopolnilni program, value: supplementary }
+          - { label: Darilna pakiranja, value: gift }
+      - { label: Vrstni red, name: order, widget: number, value_type: int, default: 100, i18n: duplicate }
+      - { label: "Velikost (npr. 0,5 L / 0,25 L)", name: size, widget: string, required: false, i18n: true }
+      - label: Fotografije
+        name: images
+        widget: image
+        multiple: true
+        i18n: duplicate
+        hint: Prva fotografija je velika slika na strani izdelka. Vse fotografije so tudi sličice v seznamu.
+      - { label: Opis, name: body, widget: markdown, required: false, i18n: true }
+
+  # ---------------------------------------------------------------- Recipes
+  - name: recipes
+    label: Recepti
+    label_singular: Recept
+    folder: src/content/recipes
+    create: true
+    i18n: true
+    slug:
+      editable: [create]
+      hint: Kratko ime za spletni naslov, v angleščini, npr. rice-salad
+    summary: "{{title}}"
+    sortable_fields: [order, title]
+    fields:
+      - { label: Naslov, name: title, widget: string, i18n: true }
+      - { label: Vrstni red, name: order, widget: number, value_type: int, default: 100, i18n: duplicate }
+      - { label: Recept, name: body, widget: markdown, i18n: true }
+
+  # ---------------------------------------------------------------- News
+  - name: news
+    label: Novice
+    label_singular: Novica
+    folder: src/content/news
+    create: true
+    i18n: true
+    slug:
+      editable: [create]
+      hint: Kratko ime za spletni naslov, v angleščini, npr. 2026-new-harvest
+    summary: "{{date | date('YYYY-MM-DD')}} – {{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Naslov, name: title, widget: string, i18n: true }
+      - { label: Datum, name: date, widget: datetime, type: date, format: YYYY-MM-DD, i18n: duplicate }
+      - { label: Besedilo, name: body, widget: markdown, i18n: true }
+
+  # ---------------------------------------------------------------- Awards
+  - name: awards
+    label: Priznanja
+    label_singular: Priznanje
+    description: Vrstice v tabeli na strani "Priznanja".
+    folder: src/content/awards
+    create: true
+    i18n: true
+    slug:
+      editable: [create]
+      hint: Kratko ime za spletni naslov, npr. 11-expo-shanghai
+    summary: "{{title}}"
+    sortable_fields: [order, title]
+    media_folder: /public/images/awards
+    public_folder: /images/awards
+    fields:
+      - { label: Prireditev, name: title, widget: string, i18n: true }
+      - { label: Vrstni red, name: order, widget: number, value_type: int, default: 100, i18n: duplicate }
+      - { label: Logotip, name: logo, widget: image, required: false, i18n: duplicate }
+      - { label: Spletna stran prireditve, name: url, widget: string, required: false, i18n: duplicate }
+      - label: Dosežki
+        name: body
+        widget: markdown
+        i18n: true
+        hint: "Npr. leto v svoji vrstici, pod njim dosežek v ležeči pisavi."
+
+  # ---------------------------------------------------------------- Fixed pages
+  - name: pages
+    label: Strani
+    label_singular: Stran
+    i18n: true
+    files:
+      - name: home
+        label: Domača stran (Predstavitev)
+        file: src/content/pages/{{locale}}/home.md
+        i18n: true
+        fields:
+          - { label: Naslov, name: title, widget: string, i18n: true }
+          - { label: Opis za Google, name: description, widget: text, required: false, i18n: true }
+          - { label: Fotografija levo, name: sideImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/sidebar, public_folder: /images/sidebar }
+          - { label: Uvodna sličica, name: introImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/photos, public_folder: /images/photos }
+          - { label: Uvodno besedilo, name: intro, widget: text, i18n: true }
+          - { label: Naslov razdelka z zadnjo novico, name: newsTitle, widget: string, i18n: true }
+          - { label: Naslov razdelka fotogalerija, name: galleryTitle, widget: string, required: false, i18n: true }
+          - { label: Sličica za fotogalerijo, name: galleryImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/photos, public_folder: /images/photos }
+          - { label: Besedilo za fotogalerijo, name: galleryText, widget: text, required: false, i18n: true }
+          - { label: Dodatno besedilo, name: body, widget: markdown, required: false, i18n: true }
+
+      - name: about
+        label: O nas (več o tem)
+        file: src/content/pages/{{locale}}/about.md
+        i18n: true
+        fields: &basic_page
+          - { label: Naslov, name: title, widget: string, i18n: true }
+          - { label: Opis za Google, name: description, widget: text, required: false, i18n: true }
+          - { label: Fotografija levo, name: sideImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/sidebar, public_folder: /images/sidebar }
+          - { label: Besedilo, name: body, widget: markdown, required: false, i18n: true, media_folder: /public/images/photos, public_folder: /images/photos }
+
+      - name: products
+        label: Kaj nudimo (besedilo pod izdelki)
+        file: src/content/pages/{{locale}}/products.md
+        i18n: true
+        fields:
+          - { label: Naslov, name: title, widget: string, i18n: true }
+          - { label: Opis za Google, name: description, widget: text, required: false, i18n: true }
+          - { label: Fotografija levo, name: sideImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/sidebar, public_folder: /images/sidebar }
+          - { label: "Levi stolpec: kje kupiti", name: sidebar, widget: markdown, required: false, i18n: true }
+          - { label: Besedilo pod seznamom izdelkov, name: body, widget: markdown, required: false, i18n: true }
+
+      - { name: awards, label: Priznanja (uvod), file: "src/content/pages/{{locale}}/awards.md", i18n: true, fields: *basic_page }
+      - { name: press, label: Drugi o nas, file: "src/content/pages/{{locale}}/press.md", i18n: true, fields: *basic_page }
+      - name: faq
+        label: Pogosta vprašanja
+        file: src/content/pages/{{locale}}/faq.md
+        i18n: true
+        fields:
+          - { label: Naslov, name: title, widget: string, i18n: true }
+          - { label: Opis za Google, name: description, widget: text, required: false, i18n: true }
+          - { label: Fotografija levo, name: sideImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/sidebar, public_folder: /images/sidebar }
+          - label: Vprašanja in odgovori
+            name: body
+            widget: markdown
+            i18n: true
+            hint: Vsako vprašanje naj bo "Naslov 3" (###). Kazalo na vrhu strani se ustvari samodejno.
+      - { name: recipes, label: Recepti (uvod), file: "src/content/pages/{{locale}}/recipes.md", i18n: true, fields: *basic_page }
+      - { name: news, label: Novice (uvod), file: "src/content/pages/{{locale}}/news.md", i18n: true, fields: *basic_page }
+      - { name: contact, label: Kontakt, file: "src/content/pages/{{locale}}/contact.md", i18n: true, fields: *basic_page }
+      - { name: links, label: Povezave, file: "src/content/pages/{{locale}}/links.md", i18n: true, fields: *basic_page }
+      - name: gallery
+        label: Fotogalerija
+        file: src/content/pages/{{locale}}/gallery.md
+        i18n: true
+        fields:
+          - { label: Naslov, name: title, widget: string, i18n: true }
+          - { label: Opis za Google, name: description, widget: text, required: false, i18n: true }
+          - { label: Fotografija levo, name: sideImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/sidebar, public_folder: /images/sidebar }
+          - { label: Besedilo nad galerijo, name: body, widget: markdown, required: false, i18n: true }
+          - label: Fotografije
+            name: images
+            widget: list
+            i18n: duplicate
+            summary: "{{caption}}"
+            fields:
+              - { label: Fotografija, name: image, widget: image, media_folder: /public/images/gallery, public_folder: /images/gallery }
+              - { label: Napis, name: caption, widget: string, required: false }
+
+  # ---------------------------------------------------------------- Menu, footer and small texts
+  - name: settings
+    label: Nastavitve
+    i18n: true
+    files:
+      - name: ui
+        label: Meni, noga in drobna besedila
+        file: src/data/ui.{{locale}}.json
+        format: json
+        i18n:
+          structure: multiple_files
+        fields:
+          - { label: Naslov spletnega mesta (zavihek brskalnika), name: siteTitle, widget: string, i18n: true }
+          - { label: Ime jezika (ob zastavici), name: languageName, widget: string, i18n: true }
+          - { label: "Meni: Predstavitev", name: navHome, widget: string, i18n: true }
+          - { label: "Meni: Kaj nudimo", name: navProducts, widget: string, i18n: true }
+          - { label: "Meni: Priznanja", name: navAwards, widget: string, i18n: true }
+          - { label: "Meni: Drugi o nas", name: navPress, widget: string, i18n: true }
+          - { label: "Meni: Pogosta vprašanja", name: navFaq, widget: string, i18n: true }
+          - { label: "Meni: Recepti", name: navRecipes, widget: string, i18n: true }
+          - { label: "Meni: Kontakt", name: navContact, widget: string, i18n: true }
+          - { label: "Meni: Povezave", name: navLinks, widget: string, i18n: true }
+          - { label: Noga (naslov in kontakt), name: footer, widget: string, i18n: true }
+          - { label: 'Povezava "Več o tem"', name: more, widget: string, i18n: true }
+          - { label: 'Povezava "Ostale novice"', name: otherNews, widget: string, i18n: true }
+          - { label: 'Povezava "Nazaj"', name: back, widget: string, i18n: true }
+          - { label: 'Povezava "Nazaj na vrh"', name: backToTop, widget: string, i18n: true }
+          - { label: "Skupina izdelkov: osnovni program", name: categoryBasic, widget: string, i18n: true }
+          - { label: "Skupina izdelkov: dopolnilni program", name: categorySupplementary, widget: string, i18n: true }
+          - { label: "Skupina izdelkov: darilna pakiranja", name: categoryGift, widget: string, i18n: true }
+          - { label: Besedilo za neobstoječo stran (404), name: notFound, widget: string, i18n: true }

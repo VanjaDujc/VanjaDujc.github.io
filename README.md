@@ -1,1 +1,47 @@
-# VanjaDujc.github.io
+# Vanja Dujc – website
+
+Website of Vanja Dujc (olive oil, Koper) in Slovenian, English, German and Italian.
+Built with [Astro](https://docs.astro.build) and edited with [Sveltia CMS](https://sveltiacms.app).
+The look is a 1:1 copy of the old site, rebuilt so it also works on phones.
+The old site is kept in git under the tag `old-site`.
+
+## Run it on your computer
+
+Needs [Node.js](https://nodejs.org) 24 (LTS).
+
+```bash
+npm install
+npm run dev
+```
+
+- Website: http://localhost:4321/
+- Editor (CMS): http://localhost:4321/admin/index.html → **Work with Local Repository** → choose this folder.
+  Works in Chrome or Edge (not Firefox/Safari). Changes are saved straight into the files here;
+  commit them with git afterwards.
+
+`npm run build` creates the finished site in `dist/`.
+
+## Where things are
+
+| What | Where |
+|---|---|
+| Pages (home, about, contact, FAQ …) | `src/content/pages/<language>/<page>.md` |
+| Products | `src/content/products/<language>/<name>.md` |
+| Recipes | `src/content/recipes/<language>/<name>.md` |
+| News | `src/content/news/<language>/<name>.md` |
+| Awards table | `src/content/awards/<language>/<name>.md` |
+| Menu, footer and small texts | `src/data/ui.<language>.json` |
+| Photos | `public/images/…` |
+| Site graphics (header, lines, icons, flags) | `public/layout/` |
+| CMS setup | `public/admin/config.yml` (must match `src/content.config.ts`) |
+| Old addresses (`kaj_nudimo.htm` …) → new ones | `src/data/legacy-redirects.json` |
+
+Languages: `sl` is the main language at `/`, the others are at `/en/`, `/de/`, `/it/`.
+A product, recipe or news item that has no file in a language is simply not shown in that language.
+
+## Still to do
+
+- New GitHub account/repository: update `backend.repo` in `public/admin/config.yml`.
+- Hosting (GitHub Pages or Cloudflare Pages) and the real domain (`site` in `astro.config.mjs`).
+- Online editing: CMS login helper (see "GitHub backend" in the Sveltia docs), then add `base_url` in `public/admin/config.yml`.
+- New videos (the old DVD files are not part of the site).

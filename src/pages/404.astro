@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { LOCALES, localePrefix, ui } from '../i18n';
+
+const alternates = Object.fromEntries(LOCALES.map((l) => [l, localePrefix(l)])) as Record<(typeof LOCALES)[number], string>;
+---
+
+<Base locale="sl" title="404" alternates={alternates} sideImage="/images/sidebar/bottle-1.jpg">
+  <h1>404</h1>
+  {
+    LOCALES.map((l) => (
+      <p lang={l}>
+        {ui[l].notFound} <a href={localePrefix(l)}>{ui[l].navHome}</a>
+      </p>
+    ))
+  }
+</Base>

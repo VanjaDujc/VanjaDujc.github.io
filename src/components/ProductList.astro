@@ -1,0 +1,47 @@
+---
+// Product overview grouped by category, as in the right column of the old "Kaj nudimo" page.
+import { getCollection } from 'astro:content';
+import { localeUrl, splitId, ui, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  current?: string;
+}
+const { locale, current } = Astro.props;
+const t = ui[locale];
+
+const products = (await getCollection('products'))
+  .filter((p) => splitId(p.id).locale === locale)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const groups = [
+  { category: 'basic', title: t.categoryBasic },
+  { category: 'supplementary', title: t.categorySupplementary },
+  { category: 'gift', title: t.categoryGift },
+]
+  .map((g) => ({ ...g, items: products.filter((p) => p.data.category === g.category) }))
+  .filter((g) => g.items.length);
+---
+
+{
+  groups.map((group) => (
+    <section class="product-group">
+      <h2>{group.title}</h2>
+      <ul class="product-list">
+        {group.items.map((p) => {
+          const href = localeUrl(locale, `products/${splitId(p.id).slug}/`);
+          return (
+            <li class:list={{ current: splitId(p.id).slug === current }}>
+              <a class="thumbs" href={href}>
+                {p.data.images.map((src) => (
+                  <img src={src} alt={p.data.title} width="56" height="56" />
+                ))}
+              </a>
+              <a href={href}>{p.data.title}</a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))
+}

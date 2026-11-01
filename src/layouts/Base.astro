@@ -1,0 +1,95 @@
+---
+// Page frame from the original site: header with logo, flags and menu,
+// a 360px left column (bottle photo / side text) and a 590px content column.
+import '../styles/site.css';
+import Markdown from '../components/Markdown.astro';
+import { LOCALES, MENU, pageUrl, ui, type Locale, type PageKey } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description?: string;
+  // URL of this page in every language (falls back to that language's home page)
+  alternates: Record<Locale, string>;
+  activeMenu?: PageKey;
+  sideImage?: string;
+  // on phones, show the left column before the content (product details)
+  asideFirst?: boolean;
+}
+
+const { locale, title, description, alternates, activeMenu, sideImage, asideFirst = false } = Astro.props;
+const t = ui[locale];
+const pageTitle = title && title !== t.siteTitle ? `${t.siteTitle} | ${title}` : t.siteTitle;
+const site = Astro.site ?? Astro.url;
+const hasAside = Astro.slots.has('aside');
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description || t.siteTitle} />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, site)} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(alternates[l], site)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates.sl, site)} />
+  </head>
+  <body>
+    <div class="page" id="top">
+      <header class="site-header">
+        <div class="header-top">
+          <a class="logo" href={pageUrl(locale, 'home')}>
+            <img src="/layout/logo.gif" alt="Vanja Dujc" width="151" height="100" />
+          </a>
+          <nav class="languages" aria-label="Language">
+            {
+              LOCALES.filter((l) => l !== locale).map((l) => (
+                <a href={alternates[l]} hreflang={l} lang={l} title={ui[l].languageName}>
+                  <img src={`/layout/flag-${l}.jpg`} alt={ui[l].languageName} width="34" height="24" />
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+        <div class="header-line"></div>
+        <nav class="menu">
+          <ul>
+            {
+              MENU.map((item) => (
+                <li>
+                  <a href={pageUrl(locale, item.page)} class:list={{ active: item.page === activeMenu }}>
+                    {t[item.label]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </header>
+
+      <div class:list={['columns', { 'aside-first': asideFirst }]}>
+        <aside class:list={['side', { 'has-content': hasAside }]}>
+          {sideImage && <img class="side-image" src={sideImage} alt="" width="360" height="420" />}
+          {
+            hasAside && (
+              <div class="side-content">
+                <slot name="aside" />
+              </div>
+            )
+          }
+        </aside>
+        <main class="main">
+          <div class="content">
+            <slot />
+          </div>
+        </main>
+      </div>
+
+      <footer class="site-footer">
+        <Markdown text={t.footer} inline />
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,539 @@
+/* Look of the original vanjadujc.net site (colours, fonts and graphics from _style.css),
+   rebuilt with flexible layout so it also works on phones. */
+
+:root {
+  --dark: #29200f;
+  --wine: #600804;
+  --paper: #d0c5a5;
+  --paper-dark: #bdb497;
+  --border: #afa689;
+  --menu: #ded79f;
+  --menu-hover: #be7b72;
+  --side-text: #d6c7a5;
+  --link: #824435;
+  --side-width: 360px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--dark);
+  color: var(--dark);
+  font-family: Verdana, sans-serif;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--link);
+  text-decoration: underline;
+}
+a:hover {
+  text-decoration: none;
+}
+
+.page {
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+/* ---------- header ---------- */
+
+.site-header {
+  background: url('/layout/header.jpg') center top / cover no-repeat;
+  min-height: 180px;
+  padding: 10px 10px 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.header-top {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 10px;
+}
+
+.logo img {
+  display: block;
+}
+
+.languages {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  display: flex;
+  gap: 2px;
+}
+.languages img {
+  display: block;
+}
+
+.header-line {
+  height: 5px;
+  background: url('/layout/line-header.gif') center / 100% 5px no-repeat;
+  margin-bottom: 10px;
+}
+
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.menu li {
+  display: flex;
+  align-items: center;
+}
+.menu li::after {
+  content: '';
+  width: 23px;
+  height: 5px;
+  margin: 0 5px;
+  background: url('/layout/menu-separator.gif') no-repeat;
+}
+.menu li:first-child::before {
+  content: '';
+  width: 23px;
+  height: 5px;
+  margin-right: 10px;
+  background: url('/layout/menu-separator.gif') no-repeat;
+}
+.menu a {
+  color: var(--menu);
+  font-weight: bold;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.menu a.active {
+  color: white;
+}
+.menu a:hover {
+  color: var(--menu-hover);
+}
+
+/* ---------- columns ---------- */
+
+.columns {
+  display: flex;
+  align-items: stretch;
+}
+
+.side {
+  flex: 0 0 var(--side-width);
+  color: var(--side-text);
+}
+.side-image {
+  display: block;
+}
+.side a {
+  color: var(--menu);
+  font-weight: bold;
+  text-decoration: none;
+}
+.side a:hover {
+  color: var(--menu-hover);
+}
+.side-content {
+  padding: 0 10px 20px 0;
+}
+.side-content p,
+.side-content li {
+  text-align: justify;
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--paper);
+  padding: 0 10px;
+}
+.main::before,
+.main::after {
+  content: '';
+  display: block;
+  height: 7px;
+  margin: 10px 0;
+  background: url('/layout/line-content.gif') center / 100% 7px no-repeat;
+}
+
+.content {
+  padding: 0 0 20px 32px;
+}
+
+/* ---------- text ---------- */
+
+h1 {
+  font-size: 14pt;
+  line-height: 18pt;
+  color: var(--wine);
+  margin: 0 0 12px -32px;
+  padding: 2px 0 0 32px;
+  background: url('/layout/icon-jar-4.gif') 0 0 no-repeat;
+  min-height: 22px;
+}
+h2 {
+  font-size: 10pt;
+  line-height: 12pt;
+  color: var(--wine);
+  margin: 16px 0 10px;
+}
+h3 {
+  font-size: 9pt;
+  color: var(--wine);
+  margin: 18px 0 4px;
+}
+.content p {
+  text-align: justify;
+  margin: 0 0 1em;
+}
+ul,
+ol {
+  margin-top: 0;
+  padding-left: 20px;
+}
+blockquote {
+  margin: 0 0 0.6em 20px;
+}
+blockquote p {
+  margin: 0;
+}
+hr {
+  border: 0;
+  height: 7px;
+  margin: 20px 0;
+  background: url('/layout/line-section.gif') center / 100% 7px no-repeat;
+}
+
+.content img {
+  border: 1px solid var(--border);
+}
+/* small photos sit to the left of the text, as on the old site */
+.content img[src*='/images/photos/'] {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+.content hr,
+.content h2,
+.content h3 {
+  clear: both;
+}
+
+.content .right,
+.right {
+  text-align: right;
+}
+.small {
+  font-size: 8pt;
+}
+
+.content::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---------- home ---------- */
+
+.teaser {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.teaser img {
+  flex: 0 0 auto;
+}
+.teaser .text {
+  flex: 1;
+}
+.latest-title {
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* ---------- lists ---------- */
+
+.item-list {
+  list-style: none;
+  padding: 0;
+}
+.item-list li {
+  margin-bottom: 14px;
+}
+.item-list .item-title {
+  font-weight: bold;
+}
+
+.recipe-list {
+  padding-left: 18px;
+}
+.recipe-list li {
+  margin-bottom: 8px;
+}
+
+/* ---------- products ---------- */
+
+.product-group + .product-group {
+  margin-top: 30px;
+}
+.product-group h2 {
+  margin-left: -32px;
+  padding-left: 32px;
+  background: url('/layout/icon-bottles.gif') 0 0 no-repeat;
+  min-height: 22px;
+}
+.product-group + .product-group h2 {
+  padding-top: 21px;
+  background:
+    url('/layout/line-section.gif') 32px 0 / calc(100% - 32px) 7px no-repeat,
+    url('/layout/icon-jar-2.gif') 0 0 no-repeat;
+}
+.product-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.product-list li {
+  display: grid;
+  grid-template-columns: 126px 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.product-list .thumbs {
+  display: flex;
+  gap: 10px;
+}
+.product-list .thumbs img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  background: var(--paper-dark);
+  border: 1px solid var(--border);
+}
+.product-list .current a {
+  color: var(--wine);
+  font-weight: bold;
+}
+.product-list a {
+  color: var(--dark);
+  text-decoration: none;
+}
+.product-list a:hover {
+  text-decoration: underline;
+}
+
+.product-box {
+  background: var(--paper-dark);
+  color: var(--dark);
+  text-align: center;
+  margin-bottom: 14px;
+}
+.side-content .product-box p {
+  text-align: center;
+}
+.product-box .name {
+  font-weight: bold;
+  padding: 10px;
+  margin: 0;
+}
+.product-box .size {
+  padding: 0 10px 10px;
+  margin: 0;
+}
+.product-box img {
+  display: block;
+  width: 100%;
+}
+.product-box .more-images {
+  display: flex;
+}
+.product-box .more-images img {
+  width: 50%;
+}
+
+/* ---------- awards ---------- */
+
+.awards {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 3px double var(--wine);
+  margin-left: -32px;
+  width: calc(100% + 32px);
+}
+.awards td {
+  vertical-align: top;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--wine);
+}
+.awards .logo {
+  width: 110px;
+}
+.awards .logo img {
+  border: 0;
+  margin: 3px;
+}
+.awards .name {
+  width: 160px;
+}
+.awards .results p {
+  margin: 0;
+}
+
+/* ---------- gallery ---------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.gallery figure {
+  margin: 0;
+  text-align: center;
+}
+.gallery img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- FAQ ---------- */
+
+.faq-index {
+  padding-left: 18px;
+}
+.faq-index li {
+  margin-bottom: 3px;
+}
+
+/* ---------- footer ---------- */
+
+.site-footer {
+  background: url('/layout/header.jpg') center / cover no-repeat;
+  color: var(--menu);
+  font-size: 8pt;
+  text-align: center;
+  padding: 12px 10px;
+}
+.site-footer a {
+  color: var(--paper);
+}
+
+/* ---------- phones and tablets ---------- */
+
+@media (max-width: 960px) {
+  .columns {
+    flex-direction: column;
+  }
+  .side {
+    order: 2;
+    flex-basis: auto;
+    padding: 10px;
+  }
+  .aside-first .side {
+    order: 0;
+  }
+  /* the decorative bottle photo is skipped on small screens */
+  .side-image {
+    display: none;
+  }
+  .side:not(.has-content) {
+    display: none;
+  }
+  .side-content {
+    padding: 0;
+  }
+  .site-header {
+    min-height: 0;
+  }
+  .menu ul {
+    justify-content: center;
+    padding: 0;
+    row-gap: 4px;
+  }
+  .menu li:first-child::before {
+    display: none;
+  }
+  .menu li:last-child::after {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding-left: 0;
+  }
+  h1 {
+    margin-left: 0;
+  }
+  .product-group h2 {
+    margin-left: 0;
+  }
+  .product-group + .product-group h2 {
+    background:
+      url('/layout/line-section.gif') 0 0 / 100% 7px no-repeat,
+      url('/layout/icon-jar-2.gif') 0 14px no-repeat;
+  }
+  .awards {
+    margin-left: 0;
+    width: 100%;
+  }
+  .awards tr {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border-bottom: 1px solid var(--wine);
+  }
+  .awards td {
+    border: 0;
+  }
+  .awards .logo {
+    width: auto;
+  }
+  .awards .name {
+    width: auto;
+    font-weight: bold;
+  }
+  .awards .results {
+    grid-column: 1 / -1;
+  }
+  .header-top {
+    padding-top: 30px;
+  }
+  .languages {
+    top: -6px;
+    bottom: auto;
+  }
+  .logo img {
+    width: 120px;
+  }
+  .teaser {
+    flex-direction: column;
+  }
+  .content img[src*='/images/photos/'] {
+    float: none;
+    display: block;
+  }
+  .product-box img {
+    max-height: 320px;
+    object-fit: contain;
+  }
+}
