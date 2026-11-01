@@ -4,6 +4,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { marked } from 'marked';
 import Base from '../layouts/Base.astro';
+import Gallery from '../components/Gallery.astro';
 import Markdown from '../components/Markdown.astro';
 import ProductList from '../components/ProductList.astro';
 import Shelf from '../components/Shelf.astro';
@@ -71,6 +72,7 @@ const { locale, view, entry } = route;
 const t = ui[locale];
 
 const ofLocale = <T extends { id: string }>(items: T[]) => items.filter((e) => splitId(e.id).locale === locale);
+const slugOf = (e: { id: string }) => splitId(e.id).slug;
 const pageEntry = async (page: PageKey) =>
   (await getCollection('pages')).find((p) => p.id === `${locale}/${page}`) as CollectionEntry<'pages'>;
 const plainText = (markdown = '') =>
@@ -96,30 +98,53 @@ const menuFor: Partial<Record<string, PageKey>> = {
   home: undefined,
 };
 const activeMenu = view in menuFor ? menuFor[view] : (view as PageKey);
-const wide = ['home', 'products', 'product'].includes(view);
+const wide = ['home', 'products', 'product', 'recipe', 'contact', 'awards'].includes(view);
 
 const products = ofLocale(await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+const productBySlug = (slug?: string) => products.find((p) => slugOf(p) === slug);
+const productUrl = (p: CollectionEntry<'products'>) => localeUrl(locale, `products/${slugOf(p)}/`);
 const news = ofLocale(await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const recipes = ofLocale(await getCollection('recipes')).sort((a, b) => a.data.order - b.data.order);
-const awards = await Promise.all(
-  ofLocale(await getCollection('awards'))
-    .sort((a, b) => a.data.order - b.data.order)
-    .map(async (a) => ({ ...a, Content: (await render(a)).Content })),
-);
-const newsUrl = (n: CollectionEntry<'news'>) => localeUrl(locale, `news/${splitId(n.id).slug}/`);
+const recipeUrl = (r: CollectionEntry<'recipes'>) => localeUrl(locale, `recipes/${slugOf(r)}/`);
+const newsUrl = (n: CollectionEntry<'news'>) => localeUrl(locale, `news/${slugOf(n)}/`);
 const productsPage = await pageEntry('products');
+const gallery = await pageEntry('gallery');
 
-// Home page: the opening of the "about" story and the most recent year of each award
+// Awards: each entry's text is "year(s)" lines followed by "> result" lines; turned into a timeline by year
+const awards = ofLocale(await getCollection('awards')).sort((a, b) => a.data.order - b.data.order);
+const timeline = (() => {
+  const rows: { year: string; title: string; result: string; url?: string }[] = [];
+  for (const a of awards) {
+    let years: string[] = [];
+    for (const raw of (a.body ?? '').split('\n')) {
+      const line = raw.trim();
+      if (/^\d{4}([,\s]+\d{4})*$/.test(line)) years = line.split(/[,\s]+/);
+      else if (line.startsWith('>') && years.length) {
+        const result = line.replace(/^>\s*/, '').replace(/^\*|\*$/g, '').trim();
+        for (const year of years) {
+          const last = rows.findLast((r) => r.year === year && r.title === a.data.title);
+          if (last) last.result += ` ${result}`;
+          else rows.push({ year, title: a.data.title, result, url: a.data.url });
+        }
+      } else if (line && !line.startsWith('>')) years = [];
+    }
+  }
+  const byYear = new Map<string, typeof rows>();
+  for (const r of rows.sort((x, y) => Number(y.year) - Number(x.year))) {
+    byYear.set(r.year, [...(byYear.get(r.year) ?? []), r]);
+  }
+  return [...byYear];
+})();
+const isTopResult = (s: string) => /šampion|prvak|champion|meister|campione|vincitore|primo posto|first place/i.test(s);
+
+// Home page: the opening of the "about" story
 const about = view === 'home' ? await pageEntry('about') : undefined;
 const story = (() => {
   const text = plainText(about?.body).replace(/^(Kdo smo\?|Who are we\?)\s*/, '');
   const cut = text.indexOf('. ', 420);
   return cut > 0 ? text.slice(0, cut + 1) : text;
 })();
-const awardYears = awards
-  .map((a) => ({ title: a.data.title, year: (a.body ?? '').match(/\b(19|20)\d{2}\b/)?.[0] ?? '' }))
-  .filter((a) => a.year)
-  .slice(0, 6);
+const homeAwards = timeline.flatMap(([, rows]) => rows).slice(0, 6);
 
 // Product page
 const product = view === 'product' ? (entry as CollectionEntry<'products'>) : undefined;
@@ -130,13 +155,30 @@ const categoryLabel = product
 const sameGroup = product
   ? products.filter((p) => p.data.category === product.data.category && p.id !== product.id)
   : [];
+const recipesWithOil = product ? recipes.filter((r) => r.data.oil === slugOf(product)) : [];
+
+// Recipe page
+const recipe = view === 'recipe' ? (entry as CollectionEntry<'recipes'>) : undefined;
+const recipeOil = productBySlug(recipe?.data.oil);
+
+// FAQ: every question (### heading) becomes a section that opens on tap
+const faqSections =
+  view === 'faq'
+    ? (entry.rendered?.html ?? '')
+        .split(/(?=<h3[\s>])/)
+        .map((part) => {
+          const m = part.match(/^<h3[^>]*id="([^"]*)"[^>]*>([\s\S]*?)<\/h3>([\s\S]*)$/);
+          return m ? { id: m[1], question: m[2], answer: m[3] } : { id: '', question: '', answer: part };
+        })
+    : [];
 
 const title = entry.data.title;
+const heading = product?.data.shortName ?? title;
 ---
 
 <Base
   locale={locale}
-  title={view === 'home' ? '' : title}
+  title={view === 'home' ? '' : heading}
   description={'description' in entry.data ? entry.data.description : undefined}
   alternates={alternates}
   activeMenu={activeMenu}
@@ -149,9 +191,8 @@ const title = entry.data.title;
         <section class="hero">
           <div class="wrap">
             <div>
-              <p class="eyebrow">{t.since}</p>
-              <h1>{page.data.title}</h1>
-              <p class="lead">{page.data.intro}</p>
+              <p class="eyebrow">{page.data.title}</p>
+              <h1>{page.data.intro}</h1>
               <div class="actions">
                 <a class="button" href={pageUrl(locale, 'products')}>
                   {t.ourOils}
@@ -160,6 +201,7 @@ const title = entry.data.title;
                   {t.navContact}
                 </a>
               </div>
+              <p class="since">{t.since}</p>
             </div>
             {page.data.heroImage && (
               <figure class="framed">
@@ -168,6 +210,17 @@ const title = entry.data.title;
             )}
           </div>
         </section>
+
+        {page.data.harvestTitle && (
+          <section class="harvest">
+            <div class="wrap">
+              <Sprig />
+              <p>
+                <strong>{page.data.harvestTitle}</strong> {page.data.harvestText}
+              </p>
+            </div>
+          </section>
+        )}
 
         <section class="story on-dark">
           <div class="wrap">
@@ -193,9 +246,31 @@ const title = entry.data.title;
                 {t.allProducts}
               </a>
             </div>
-            <Shelf locale={locale} items={products.filter((p) => p.data.category === 'basic')} />
+            <Shelf locale={locale} items={products.filter((p) => p.data.category === 'basic' && p.data.taste)} />
           </div>
         </section>
+
+        {page.data.photos && page.data.photos.length > 0 && (
+          <section class="photo-strip">
+            <div class="wrap">
+              <h2 class="small-title">{t.photoStrip}</h2>
+              <ul>
+                {page.data.photos.map((src) => (
+                  <li>
+                    <a href={pageUrl(locale, 'gallery')}>
+                      <img src={src} alt="" width="800" height="600" loading="lazy" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p class="right">
+                <a class="more" href={pageUrl(locale, 'gallery')}>
+                  {gallery?.data.title ?? t.galleryLink}
+                </a>
+              </p>
+            </div>
+          </section>
+        )}
 
         <section class="band mid">
           <div class="wrap press">
@@ -214,10 +289,14 @@ const title = entry.data.title;
             <div>
               <h2 class="small-title">{t.navAwards}</h2>
               <ul class="award-list">
-                {awardYears.map((a) => (
+                {homeAwards.map((a) => (
                   <li>
                     <span class="year">{a.year}</span>
-                    <span>{a.title}</span>
+                    <span>
+                      {a.title}
+                      <br />
+                      <em>{a.result}</em>
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -229,33 +308,24 @@ const title = entry.data.title;
         </section>
 
         <section class="band paper">
-          <div class="wrap duo">
-            <div>
+          <div class="wrap">
+            <div class="band-head">
               <h2 class="section-title">
                 <Sprig />
                 {t.fromKitchen}
               </h2>
-              <ul class="recipe-teaser">
-                {recipes.slice(0, 5).map((r) => (
-                  <li>
-                    <a href={localeUrl(locale, `recipes/${splitId(r.id).slug}/`)}>{r.data.title}</a>
-                  </li>
-                ))}
-              </ul>
               <a class="more" href={pageUrl(locale, 'recipes')}>
                 {t.allRecipes}
               </a>
             </div>
-            <figure class="framed gallery-teaser">
-              <a href={pageUrl(locale, 'gallery')}>
-                <img src="/images/gallery/r-31-soncni-zahod.jpg" alt="" width="800" height="600" loading="lazy" />
-              </a>
-              <figcaption>
-                <a class="more" href={pageUrl(locale, 'gallery')}>
-                  {page.data.galleryTitle || t.galleryLink}
-                </a>
-              </figcaption>
-            </figure>
+            <ul class="recipe-list cols">
+              {recipes.slice(0, 8).map((r) => (
+                <li>
+                  <a href={recipeUrl(r)}>{r.data.title}</a>
+                  {productBySlug(r.data.oil) && <span class="chip">{productBySlug(r.data.oil)!.data.shortName}</span>}
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
@@ -344,12 +414,53 @@ const title = entry.data.title;
             </div>
             <div class="product-info">
               <p class="eyebrow">{categoryLabel}</p>
-              <h1>{title}</h1>
-              {product.data.size && <p class="product-size">{product.data.size}</p>}
+              <h1>{heading}</h1>
+              <p class="product-sub">
+                {product.data.shortName && <span>{title}</span>}
+                {product.data.size && <span>{product.data.size}</span>}
+              </p>
               <div class="prose">
                 <Content />
               </div>
+              {(product.data.aroma || product.data.flavour) && (
+                <dl class="notes">
+                  {product.data.aroma && (
+                    <div>
+                      <dt>{t.aroma}</dt>
+                      <dd>{product.data.aroma}</dd>
+                    </div>
+                  )}
+                  {product.data.flavour && (
+                    <div>
+                      <dt>{t.flavour}</dt>
+                      <dd>{product.data.flavour}</dd>
+                    </div>
+                  )}
+                </dl>
+              )}
               {product.data.taste && <TasteProfile locale={locale} taste={product.data.taste} />}
+              {product.data.pairings.length > 0 && (
+                <section class="pairings">
+                  <h2 class="small-title">{t.pairings}</h2>
+                  <ul class="chips">
+                    {product.data.pairings.map((p) => (
+                      <li class="chip">{p}</li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              {recipesWithOil.length > 0 && (
+                <section class="pairings">
+                  <h2 class="small-title">{t.recipesWithOil}</h2>
+                  <ul class="recipe-list">
+                    {recipesWithOil.map((r) => (
+                      <li>
+                        <a href={recipeUrl(r)}>{r.data.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
               <aside class="buy-box on-dark">
                 <h2>{t.buyTitle}</h2>
                 <p>{t.buyText}</p>
@@ -399,33 +510,135 @@ const title = entry.data.title;
   }
 
   {
+    recipe && (
+      <section class="band paper">
+        <div class="wrap">
+          <nav class="crumbs">
+            <a href={pageUrl(locale, 'recipes')}>{page.data.title}</a>
+          </nav>
+          <h1 class="recipe-title">{title}</h1>
+          <div class="recipe">
+            <aside class="ingredients">
+              <h2 class="small-title">{t.ingredients}</h2>
+              {recipe.data.servings && <p class="servings">{recipe.data.servings}</p>}
+              <div class="ingredient-list">
+                <Markdown text={recipe.data.ingredients} />
+              </div>
+            </aside>
+            <div class="prose method">
+              <h2 class="small-title">{t.preparation}</h2>
+              <Content />
+              <div class="recipe-foot">
+                {recipeOil && (
+                  <a class="oil-card" href={productUrl(recipeOil)}>
+                    {recipeOil.data.images[0] && <img src={recipeOil.data.images[0]} alt="" />}
+                    <span>
+                      <span class="small-title">{t.bestWith}</span>
+                      <span class="oil-name">{recipeOil.data.shortName ?? recipeOil.data.title}</span>
+                    </span>
+                  </a>
+                )}
+                <button type="button" class="button ghost print" onclick="window.print()">
+                  {t.printRecipe}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          // tap an ingredient to tick it off while cooking
+          document.querySelectorAll('.ingredient-list li').forEach((li) => {
+            li.setAttribute('role', 'checkbox');
+            li.setAttribute('aria-checked', 'false');
+            li.setAttribute('tabindex', '0');
+            const toggle = () => li.setAttribute('aria-checked', String(li.getAttribute('aria-checked') !== 'true'));
+            li.addEventListener('click', toggle);
+            li.addEventListener('keydown', (e) => {
+              if ((e as KeyboardEvent).key === ' ' || (e as KeyboardEvent).key === 'Enter') {
+                e.preventDefault();
+                toggle();
+              }
+            });
+          });
+        </script>
+      </section>
+    )
+  }
+
+  {
     view === 'awards' && (
-      <>
-        <h1>{title}</h1>
-        <Content />
-        <table class="awards">
-          <tbody>
-            {awards.map((a) => (
-              <tr>
-                <td class="logo">
-                  {a.data.logo &&
-                    (a.data.url ? (
-                      <a href={a.data.url}>
-                        <img src={a.data.logo} alt={a.data.title} />
-                      </a>
-                    ) : (
+      <section class="band paper">
+        <div class="wrap narrow">
+          <h1>{title}</h1>
+          <div class="prose">
+            <Content />
+          </div>
+          <ul class="logo-row">
+            {awards
+              .filter((a) => a.data.logo)
+              .map((a) => (
+                <li>
+                  {a.data.url ? (
+                    <a href={a.data.url}>
                       <img src={a.data.logo} alt={a.data.title} />
-                    ))}
-                </td>
-                <td class="name">{a.data.title}</td>
-                <td class="results">
-                  <a.Content />
-                </td>
-              </tr>
+                    </a>
+                  ) : (
+                    <img src={a.data.logo} alt={a.data.title} />
+                  )}
+                </li>
+              ))}
+          </ul>
+          <ol class="timeline">
+            {timeline.map(([year, rows]) => (
+              <li>
+                <span class="timeline-year">{year}</span>
+                <ul>
+                  {rows.map((r) => (
+                    <li class:list={{ top: isTopResult(r.result) }}>
+                      <span class="timeline-title">{r.title}</span>
+                      <span class="timeline-result">{r.result.replace(/\*/g, '')}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
             ))}
-          </tbody>
-        </table>
-      </>
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    view === 'contact' && (
+      <section class="band paper">
+        <div class="wrap duo">
+          <div>
+            <h1>{title}</h1>
+            <div class="prose address">
+              <Content />
+            </div>
+            <div class="actions">
+              {CONTACT.phones.map((p) => (
+                <a class="button" href={`tel:${p.tel}`}>
+                  {t.call} {p.name} <small>{p.display}</small>
+                </a>
+              ))}
+              <a class="button ghost" href={`mailto:${CONTACT.email}`}>
+                {t.email}
+              </a>
+            </div>
+          </div>
+          <div class="contact-side">
+            <figure class="framed">
+              <img src="/images/gallery/r-31-soncni-zahod.jpg" alt="" width="800" height="600" />
+            </figure>
+            <p>{t.buyText}</p>
+            <a class="button ghost" href={CONTACT.mapUrl}>
+              {t.openMap}
+            </a>
+          </div>
+        </div>
+      </section>
     )
   }
 
@@ -433,20 +646,27 @@ const title = entry.data.title;
     view === 'faq' && (
       <>
         <h1>{title}</h1>
-        <ul class="faq-index">
-          {headings
-            .filter((h) => h.depth === 3)
-            .map((h) => (
-              <li>
-                <a href={`#${h.slug}`}>{h.text}</a>
-              </li>
-            ))}
-        </ul>
-        <hr />
-        <Content />
-        <p class="right small">
-          <a href="#top">{t.backToTop}</a>
-        </p>
+        <div class="faq">
+          {faqSections.map((s) =>
+            s.question ? (
+              <details id={s.id}>
+                <summary set:html={s.question} />
+                <div class="answer" set:html={s.answer} />
+              </details>
+            ) : (
+              <Fragment set:html={s.answer} />
+            ),
+          )}
+        </div>
+        <script>
+          // opening a question from a link (e.g. /faq/#question) unfolds it
+          const open = () => {
+            const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+            if (target instanceof HTMLDetailsElement) target.open = true;
+          };
+          open();
+          window.addEventListener('hashchange', open);
+        </script>
       </>
     )
   }
@@ -456,18 +676,7 @@ const title = entry.data.title;
       <>
         <h1>{title}</h1>
         <Content />
-        <ul class="gallery">
-          {(page.data.images ?? []).map((img) => (
-            <li>
-              <figure>
-                <a href={img.image}>
-                  <img src={img.image} alt={img.caption ?? ''} loading="lazy" />
-                </a>
-                {img.caption && <figcaption>{img.caption}</figcaption>}
-              </figure>
-            </li>
-          ))}
-        </ul>
+        <Gallery locale={locale} images={page.data.images ?? []} />
       </>
     )
   }
@@ -477,25 +686,14 @@ const title = entry.data.title;
       <>
         <h1>{title}</h1>
         <Content />
-        <ul class="recipe-teaser">
+        <ul class="recipe-list">
           {recipes.map((r) => (
             <li>
-              <a href={localeUrl(locale, `recipes/${splitId(r.id).slug}/`)}>{r.data.title}</a>
+              <a href={recipeUrl(r)}>{r.data.title}</a>
+              {productBySlug(r.data.oil) && <span class="chip">{productBySlug(r.data.oil)!.data.shortName}</span>}
             </li>
           ))}
         </ul>
-      </>
-    )
-  }
-
-  {
-    view === 'recipe' && (
-      <>
-        <nav class="crumbs">
-          <a href={pageUrl(locale, 'recipes')}>{page.data.title}</a>
-        </nav>
-        <h1>{title}</h1>
-        <Content />
       </>
     )
   }
@@ -535,7 +733,7 @@ const title = entry.data.title;
   }
 
   {
-    ['about', 'press', 'contact', 'links'].includes(view) && (
+    ['about', 'press', 'links'].includes(view) && (
       <>
         <h1>{title}</h1>
         <Content />

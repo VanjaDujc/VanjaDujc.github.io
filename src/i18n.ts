@@ -53,7 +53,7 @@ export const CONTACT = {
     { name: 'Lena', display: '031 347 936', tel: '+38631347936' },
   ],
   email: 'vanjadujc@siol.net',
-  mapUrl: 'https://www.openstreetmap.org/search?query=Dolga%20reber%204%2C%206000%20Koper',
+  mapUrl: 'https://www.google.com/maps/search/?api=1&query=Dolga+reber+4%2C+6000+Koper%2C+Slovenia',
 };
 
 export function localePrefix(locale: Locale): string {

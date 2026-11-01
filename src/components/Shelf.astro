@@ -16,9 +16,9 @@ const { locale, items } = Astro.props;
       <li>
         <a href={localeUrl(locale, `products/${splitId(p.id).slug}/`)}>
           <span class="shelf-photo">
-            {p.data.images[0] && <img src={p.data.images[0]} alt="" loading="lazy" />}
+            {p.data.images[0] && <img src={p.data.images[0]} alt={p.data.title} loading="lazy" />}
           </span>
-          <span class="shelf-name">{p.data.title}</span>
+          <span class="shelf-name">{p.data.shortName ?? p.data.title}</span>
           {p.data.size && <span class="shelf-size">{p.data.size}</span>}
         </a>
       </li>

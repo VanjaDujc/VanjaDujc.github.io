@@ -35,7 +35,7 @@
   "email": "Pišite nam",
   "whereToBuy": "Trgovine, kjer prodajajo naša olja",
   "directions": "Kako do nas",
-  "taste": "Okus",
+  "taste": "Značaj olja",
   "tasteFruity": "Sadežnost",
   "tasteBitter": "Grenkoba",
   "tastePungent": "Pikantnost",
@@ -43,5 +43,18 @@
   "sameGroup": "Iz iste skupine",
   "since": "Dolga reber, Koper · oljke gojimo od leta 1984",
   "newsLink": "Novice",
-  "galleryLink": "Fotogalerija"
+  "galleryLink": "Fotogalerija",
+  "aroma": "Vonj",
+  "flavour": "Okus",
+  "pairings": "Priporočamo k",
+  "ingredients": "Sestavine",
+  "preparation": "Priprava",
+  "bestWith": "Najbolje se poda",
+  "printRecipe": "Natisni recept",
+  "recipesWithOil": "Recepti s tem oljem",
+  "openMap": "Odpri zemljevid",
+  "close": "Zapri",
+  "previous": "Prejšnja",
+  "next": "Naslednja",
+  "photoStrip": "Iz našega oljčnika"
 }

@@ -1,0 +1,68 @@
+---
+// Photo grid; a tap opens the photo large, with previous / next and captions.
+import { ui, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  images: { image: string; caption?: string }[];
+}
+const { locale, images } = Astro.props;
+const t = ui[locale];
+---
+
+<ul class="gallery">
+  {
+    images.map((img, i) => (
+      <li>
+        <figure>
+          <a href={img.image} data-index={i}>
+            <img src={img.image} alt={img.caption ?? ''} loading="lazy" />
+          </a>
+          {img.caption && <figcaption>{img.caption}</figcaption>}
+        </figure>
+      </li>
+    ))
+  }
+</ul>
+
+<dialog class="lightbox" aria-label={t.galleryLink}>
+  <figure>
+    <img src="" alt="" />
+    <figcaption></figcaption>
+  </figure>
+  <button type="button" class="lb-prev" aria-label={t.previous}>‹</button>
+  <button type="button" class="lb-next" aria-label={t.next}>›</button>
+  <button type="button" class="lb-close" aria-label={t.close}>×</button>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('.lightbox');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.gallery a[data-index]')];
+  if (dialog && links.length) {
+    const img = dialog.querySelector('img')!;
+    const caption = dialog.querySelector('figcaption')!;
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + links.length) % links.length;
+      const thumb = links[current].querySelector('img')!;
+      img.src = links[current].href;
+      img.alt = thumb.alt;
+      caption.textContent = thumb.alt;
+    };
+    links.forEach((a, i) =>
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        show(i);
+        dialog.showModal();
+      }),
+    );
+    dialog.querySelector('.lb-prev')!.addEventListener('click', () => show(current - 1));
+    dialog.querySelector('.lb-next')!.addEventListener('click', () => show(current + 1));
+    dialog.querySelector('.lb-close')!.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+  }
+</script>

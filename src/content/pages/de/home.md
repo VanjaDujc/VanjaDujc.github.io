@@ -11,4 +11,8 @@ heroImage: /images/gallery/r-02-zelena.jpg
 highlightQuote: Der Olivenflüsterer
 highlightSource: Der Feinschmecker, Olivenöl-Special 2007
 highlightText: Heute ist der Autodidakt der beste Ölmacher in Osteuropa, seine Produkte sind weltweit begehrt.
+photos:
+  - /images/gallery/r-19-ana-magda.jpg
+  - /images/gallery/r-05-crna.jpg
+  - /images/gallery/r-31-soncni-zahod.jpg
 ---

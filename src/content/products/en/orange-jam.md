@@ -1,15 +1,14 @@
 ---
 title: Orange extra jam
+shortName: Orange jam
 category: supplementary
-order: 10
+order: 13
 size: glass
 images:
   - /images/products/orange-jam.jpg
 ---
 
-**ORANGE EXTRA JAM**
-
 - made of fresh oranges, freshly squeezed lemon juice and 100% natural apple juice from Brkini hills
 - 73 g of fruit on 100 g of ready product
 - 25% of sugar added
-- without adding water nor fruit concentrates.
+- without adding water nor fruit concentrates

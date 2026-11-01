@@ -1,16 +1,19 @@
 ---
 title: Dried tomatoes in olive oil
+shortName: Dried tomatoes
 category: supplementary
-order: 8
+order: 11
 size: glass
 images:
   - /images/products/dried-tomatoes.jpg
+pairings:
+  - cold starters
+  - pasta
+  - vegetable sauces
+  - fish soup
 ---
-
-**DRIED TOMATOES IN OLIVE OIL**
 
 - sun dried tomatoes in extra virgin olive oil couvée
 - prepared by our own recipe
 - tomatoes have delicious flavour, they are not too solid nor salty
-- recommended for:  cold starters, pasta, vegetable sauces or fish soup
-- the product is pasteurised.
+- the product is pasteurised

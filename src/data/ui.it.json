@@ -35,7 +35,7 @@
   "email": "Scriveteci",
   "whereToBuy": "Negozi con i nostri oli",
   "directions": "Come raggiungerci",
-  "taste": "Gusto",
+  "taste": "Carattere",
   "tasteFruity": "Fruttato",
   "tasteBitter": "Amaro",
   "tastePungent": "Piccante",
@@ -43,5 +43,18 @@
   "sameGroup": "Dallo stesso gruppo",
   "since": "Dolga reber, Capodistria · coltiviamo olive dal 1984",
   "newsLink": "Notizie",
-  "galleryLink": "Fotogalleria"
+  "galleryLink": "Fotogalleria",
+  "aroma": "Profumo",
+  "flavour": "Sapore",
+  "pairings": "Raccomandiamo",
+  "ingredients": "Ingredienti",
+  "preparation": "Preparazione",
+  "bestWith": "Ideale con",
+  "printRecipe": "Stampa la ricetta",
+  "recipesWithOil": "Ricette con questo olio",
+  "openMap": "Apri la mappa",
+  "close": "Chiudi",
+  "previous": "Precedente",
+  "next": "Successiva",
+  "photoStrip": "Dal nostro uliveto"
 }

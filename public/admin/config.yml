@@ -47,12 +47,13 @@ collections:
     slug:
       editable: [create]
       hint: Kratko ime za spletni naslov, v angleščini, npr. lemon-oil
-    summary: "{{title}}"
+    summary: "{{shortName}} – {{title}}"
     sortable_fields: [order, title]
     media_folder: /public/images/products
     public_folder: /images/products
     fields:
-      - { label: Naziv, name: title, widget: string, i18n: true }
+      - { label: Kratko ime (npr. Couvée), name: shortName, widget: string, required: false, i18n: true }
+      - { label: Polni naziv, name: title, widget: string, i18n: true }
       - label: Skupina
         name: category
         widget: select
@@ -79,6 +80,14 @@ collections:
         multiple: true
         i18n: duplicate
         hint: Prva fotografija je velika slika na strani izdelka. Vse fotografije so tudi sličice v seznamu.
+      - { label: Vonj, name: aroma, widget: string, required: false, i18n: true }
+      - { label: Okus, name: flavour, widget: string, required: false, i18n: true }
+      - label: Priporočamo k
+        name: pairings
+        widget: list
+        required: false
+        i18n: true
+        hint: Ena jed na vrstico, npr. "testeninam".
       - { label: Opis, name: body, widget: markdown, required: false, i18n: true }
 
   # ---------------------------------------------------------------- Recipes
@@ -96,7 +105,18 @@ collections:
     fields:
       - { label: Naslov, name: title, widget: string, i18n: true }
       - { label: Vrstni red, name: order, widget: number, value_type: int, default: 100, i18n: duplicate }
-      - { label: Recept, name: body, widget: markdown, i18n: true }
+      - label: Najbolje se poda (olje)
+        name: oil
+        widget: relation
+        collection: products
+        value_field: "{{slug}}"
+        search_fields: [shortName, title]
+        display_fields: [shortName]
+        required: false
+        i18n: duplicate
+      - { label: "Za koliko oseb (npr. za štiri osebe)", name: servings, widget: string, required: false, i18n: true }
+      - { label: Sestavine, name: ingredients, widget: markdown, i18n: true, hint: Seznam z alinejami; vsaka sestavina v svoji vrstici. }
+      - { label: Priprava, name: body, widget: markdown, i18n: true }
 
   # ---------------------------------------------------------------- News
   - name: news
@@ -165,6 +185,9 @@ collections:
           - { label: "Citat iz medijev: besedilo", name: highlightQuote, widget: string, required: false, i18n: true }
           - { label: "Citat iz medijev: vir", name: highlightSource, widget: string, required: false, i18n: true }
           - { label: "Citat iz medijev: dodatno besedilo", name: highlightText, widget: text, required: false, i18n: true }
+          - { label: "Letošnja letina: naslov (prazno = skrito)", name: harvestTitle, widget: string, required: false, i18n: true }
+          - { label: "Letošnja letina: besedilo", name: harvestText, widget: text, required: false, i18n: true }
+          - { label: Trak fotografij, name: photos, widget: image, multiple: true, required: false, i18n: duplicate, media_folder: /public/images/gallery, public_folder: /images/gallery }
           - { label: Dodatno besedilo, name: body, widget: markdown, required: false, i18n: true }
 
       - name: about
@@ -282,3 +305,16 @@ collections:
           - { label: "Okus: pikantnost", name: tastePungent, widget: string, i18n: true }
           - { label: "Izdelek: Velikost", name: sizes, widget: string, i18n: true }
           - { label: "Izdelek: Iz iste skupine", name: sameGroup, widget: string, i18n: true }
+          - { label: "Izdelek: Vonj", name: aroma, widget: string, i18n: true }
+          - { label: "Izdelek: Okus", name: flavour, widget: string, i18n: true }
+          - { label: "Izdelek: Priporočamo k", name: pairings, widget: string, i18n: true }
+          - { label: "Izdelek: Recepti s tem oljem", name: recipesWithOil, widget: string, i18n: true }
+          - { label: "Recept: Sestavine", name: ingredients, widget: string, i18n: true }
+          - { label: "Recept: Priprava", name: preparation, widget: string, i18n: true }
+          - { label: "Recept: Najbolje se poda", name: bestWith, widget: string, i18n: true }
+          - { label: "Recept: Natisni", name: printRecipe, widget: string, i18n: true }
+          - { label: "Kontakt: Odpri zemljevid", name: openMap, widget: string, i18n: true }
+          - { label: "Galerija: Zapri", name: close, widget: string, i18n: true }
+          - { label: "Galerija: Prejšnja", name: previous, widget: string, i18n: true }
+          - { label: "Galerija: Naslednja", name: next, widget: string, i18n: true }
+          - { label: "Domača stran: trak fotografij", name: photoStrip, widget: string, i18n: true }

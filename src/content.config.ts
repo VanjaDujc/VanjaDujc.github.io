@@ -25,6 +25,11 @@ const pages = defineCollection({
     highlightQuote: z.string().optional(),
     highlightSource: z.string().optional(),
     highlightText: z.string().optional(),
+    // "this year's harvest" box on the home page, hidden while empty
+    harvestTitle: z.string().optional(),
+    harvestText: z.string().optional(),
+    // photo strip on the home page
+    photos: z.array(z.string()).optional(),
     // gallery page
     images: z.array(z.object({ image: z.string(), caption: z.string().optional() })).optional(),
   }),
@@ -34,6 +39,8 @@ const products = defineCollection({
   loader: markdown('./src/content/products'),
   schema: z.object({
     title: z.string(),
+    // short name for lists and headings, e.g. "Couvée"
+    shortName: z.string().optional(),
     category: z.enum(['basic', 'supplementary', 'gift']),
     order: z.number().default(0),
     size: z.string().optional(),
@@ -42,6 +49,9 @@ const products = defineCollection({
     taste: z
       .object({ fruity: z.number().min(0).max(5), bitter: z.number().min(0).max(5), pungent: z.number().min(0).max(5) })
       .optional(),
+    aroma: z.string().optional(),
+    flavour: z.string().optional(),
+    pairings: z.array(z.string()).default([]),
   }),
 });
 
@@ -50,6 +60,10 @@ const recipes = defineCollection({
   schema: z.object({
     title: z.string(),
     order: z.number().default(0),
+    // product that suits the recipe best, e.g. "orange-oil"
+    oil: z.string().optional(),
+    servings: z.string().optional(),
+    ingredients: z.string().optional(),
   }),
 });
 

@@ -35,7 +35,7 @@
   "email": "Schreiben Sie uns",
   "whereToBuy": "Geschäfte mit unseren Ölen",
   "directions": "Anfahrt",
-  "taste": "Geschmack",
+  "taste": "Charakter",
   "tasteFruity": "Fruchtigkeit",
   "tasteBitter": "Bitterkeit",
   "tastePungent": "Schärfe",
@@ -43,5 +43,18 @@
   "sameGroup": "Aus derselben Gruppe",
   "since": "Dolga reber, Koper · Olivenanbau seit 1984",
   "newsLink": "Nachrichten",
-  "galleryLink": "Fotogalerie"
+  "galleryLink": "Fotogalerie",
+  "aroma": "Duft",
+  "flavour": "Geschmack",
+  "pairings": "Empfohlen zu",
+  "ingredients": "Zutaten",
+  "preparation": "Zubereitung",
+  "bestWith": "Am besten mit",
+  "printRecipe": "Rezept drucken",
+  "recipesWithOil": "Rezepte mit diesem Öl",
+  "openMap": "Karte öffnen",
+  "close": "Schließen",
+  "previous": "Zurück",
+  "next": "Weiter",
+  "photoStrip": "Aus unserem Olivenhain"
 }

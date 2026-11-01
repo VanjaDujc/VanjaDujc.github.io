@@ -35,7 +35,7 @@
   "email": "Write to us",
   "whereToBuy": "Shops selling our oils",
   "directions": "How to find us",
-  "taste": "Taste",
+  "taste": "Character",
   "tasteFruity": "Fruitiness",
   "tasteBitter": "Bitterness",
   "tastePungent": "Pungency",
@@ -43,5 +43,18 @@
   "sameGroup": "From the same group",
   "since": "Dolga reber, Koper · growing olives since 1984",
   "newsLink": "News",
-  "galleryLink": "Photogallery"
+  "galleryLink": "Photogallery",
+  "aroma": "Aroma",
+  "flavour": "Flavour",
+  "pairings": "Goes well with",
+  "ingredients": "Ingredients",
+  "preparation": "Preparation",
+  "bestWith": "Best with",
+  "printRecipe": "Print recipe",
+  "recipesWithOil": "Recipes with this oil",
+  "openMap": "Open map",
+  "close": "Close",
+  "previous": "Previous",
+  "next": "Next",
+  "photoStrip": "From our olive grove"
 }
