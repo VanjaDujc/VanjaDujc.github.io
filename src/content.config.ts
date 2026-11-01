@@ -21,6 +21,10 @@ const pages = defineCollection({
     galleryTitle: z.string().optional(),
     galleryImage: z.string().optional(),
     galleryText: z.string().optional(),
+    heroImage: z.string().optional(),
+    highlightQuote: z.string().optional(),
+    highlightSource: z.string().optional(),
+    highlightText: z.string().optional(),
     // gallery page
     images: z.array(z.object({ image: z.string(), caption: z.string().optional() })).optional(),
   }),
@@ -34,6 +38,10 @@ const products = defineCollection({
     order: z.number().default(0),
     size: z.string().optional(),
     images: z.array(z.string()).default([]),
+    // taste profile, 0-5 for each
+    taste: z
+      .object({ fruity: z.number().min(0).max(5), bitter: z.number().min(0).max(5), pungent: z.number().min(0).max(5) })
+      .optional(),
   }),
 });
 

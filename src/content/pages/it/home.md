@@ -7,4 +7,8 @@ newsTitle: Ultime notizie
 galleryTitle: Fotogaleria
 galleryImage: /images/photos/bottles.jpg
 galleryText: Galeria immagini (in preparazione)...
+heroImage: /images/gallery/r-02-zelena.jpg
+highlightQuote: Già il terzo anno ci troviamo nella guida, sempre con ottimi prodotti
+highlightSource: "L'extravergine: guida ai migliori oli del mondo di qualità accertata"
+highlightText: Congratulazioni a Vanja Dujc, proprietario della fattoria famigliare che ha creato venti anni fa in pratica dal nulla e da solo.
 ---

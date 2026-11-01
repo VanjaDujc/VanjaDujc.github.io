@@ -28,17 +28,33 @@ export const PAGE_PATHS = {
 } as const;
 export type PageKey = keyof typeof PAGE_PATHS;
 
-// Main menu, in display order
+// Main menu, in display order (the logo leads to the home page)
 export const MENU: { page: PageKey; label: keyof UiText }[] = [
-  { page: 'home', label: 'navHome' },
-  { page: 'products', label: 'navProducts' },
+  { page: 'about', label: 'navAbout' },
+  { page: 'products', label: 'navProductsShort' },
   { page: 'awards', label: 'navAwards' },
-  { page: 'press', label: 'navPress' },
-  { page: 'faq', label: 'navFaq' },
   { page: 'recipes', label: 'navRecipes' },
+  { page: 'faq', label: 'navFaqShort' },
   { page: 'contact', label: 'navContact' },
+];
+
+// Smaller links in the footer
+export const FOOTER_MENU: { page: PageKey; label: keyof UiText }[] = [
+  { page: 'press', label: 'navPress' },
+  { page: 'news', label: 'newsLink' },
+  { page: 'gallery', label: 'galleryLink' },
   { page: 'links', label: 'navLinks' },
 ];
+
+// Phone numbers and e-mail used for the call / write buttons
+export const CONTACT = {
+  phones: [
+    { name: 'Vanja', display: '040 234 537', tel: '+38640234537' },
+    { name: 'Lena', display: '031 347 936', tel: '+38631347936' },
+  ],
+  email: 'vanjadujc@siol.net',
+  mapUrl: 'https://www.openstreetmap.org/search?query=Dolga%20reber%204%2C%206000%20Koper',
+};
 
 export function localePrefix(locale: Locale): string {
   return locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;

@@ -63,6 +63,16 @@ collections:
           - { label: Darilna pakiranja, value: gift }
       - { label: Vrstni red, name: order, widget: number, value_type: int, default: 100, i18n: duplicate }
       - { label: "Velikost (npr. 0,5 L / 0,25 L)", name: size, widget: string, required: false, i18n: true }
+      - label: Okus (0-5)
+        name: taste
+        widget: object
+        required: false
+        i18n: duplicate
+        hint: Samo za olja. Prikaže se kot pet oljk.
+        fields:
+          - { label: Sadežnost, name: fruity, widget: number, value_type: int, min: 0, max: 5 }
+          - { label: Grenkoba, name: bitter, widget: number, value_type: int, min: 0, max: 5 }
+          - { label: Pikantnost, name: pungent, widget: number, value_type: int, min: 0, max: 5 }
       - label: Fotografije
         name: images
         widget: image
@@ -151,6 +161,10 @@ collections:
           - { label: Naslov razdelka fotogalerija, name: galleryTitle, widget: string, required: false, i18n: true }
           - { label: Sličica za fotogalerijo, name: galleryImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/photos, public_folder: /images/photos }
           - { label: Besedilo za fotogalerijo, name: galleryText, widget: text, required: false, i18n: true }
+          - { label: Velika fotografija na vrhu, name: heroImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/gallery, public_folder: /images/gallery }
+          - { label: "Citat iz medijev: besedilo", name: highlightQuote, widget: string, required: false, i18n: true }
+          - { label: "Citat iz medijev: vir", name: highlightSource, widget: string, required: false, i18n: true }
+          - { label: "Citat iz medijev: dodatno besedilo", name: highlightText, widget: text, required: false, i18n: true }
           - { label: Dodatno besedilo, name: body, widget: markdown, required: false, i18n: true }
 
       - name: about
@@ -242,3 +256,29 @@ collections:
           - { label: "Skupina izdelkov: dopolnilni program", name: categorySupplementary, widget: string, i18n: true }
           - { label: "Skupina izdelkov: darilna pakiranja", name: categoryGift, widget: string, i18n: true }
           - { label: Besedilo za neobstoječo stran (404), name: notFound, widget: string, i18n: true }
+          - { label: "Meni: O nas", name: navAbout, widget: string, i18n: true }
+          - { label: "Meni: Olja in izdelki", name: navProductsShort, widget: string, i18n: true }
+          - { label: "Meni: Vse o olju", name: navFaqShort, widget: string, i18n: true }
+          - { label: "Gumb za meni na telefonu", name: menu, widget: string, i18n: true }
+          - { label: "Noga: Novice", name: newsLink, widget: string, i18n: true }
+          - { label: "Noga: Fotogalerija", name: galleryLink, widget: string, i18n: true }
+          - { label: "Domača stran: pod naslovom (kraj, leto)", name: since, widget: string, i18n: true }
+          - { label: "Naslov: Naša olja", name: ourOils, widget: string, i18n: true }
+          - { label: "Povezava: Več o nas", name: aboutUs, widget: string, i18n: true }
+          - { label: "Povezava: Vsi izdelki", name: allProducts, widget: string, i18n: true }
+          - { label: "Povezava: Vsa priznanja", name: allAwards, widget: string, i18n: true }
+          - { label: "Povezava: Pisali so o nas", name: fromPress, widget: string, i18n: true }
+          - { label: "Naslov: Iz naše kuhinje", name: fromKitchen, widget: string, i18n: true }
+          - { label: "Povezava: Vsi recepti", name: allRecipes, widget: string, i18n: true }
+          - { label: "Nakup: naslov", name: buyTitle, widget: string, i18n: true }
+          - { label: "Nakup: besedilo", name: buyText, widget: text, i18n: true }
+          - { label: "Gumb: Pokličite", name: call, widget: string, i18n: true }
+          - { label: "Gumb: Pišite nam", name: email, widget: string, i18n: true }
+          - { label: "Povezava: Trgovine", name: whereToBuy, widget: string, i18n: true }
+          - { label: "Povezava: Kako do nas", name: directions, widget: string, i18n: true }
+          - { label: "Okus: naslov", name: taste, widget: string, i18n: true }
+          - { label: "Okus: sadežnost", name: tasteFruity, widget: string, i18n: true }
+          - { label: "Okus: grenkoba", name: tasteBitter, widget: string, i18n: true }
+          - { label: "Okus: pikantnost", name: tastePungent, widget: string, i18n: true }
+          - { label: "Izdelek: Velikost", name: sizes, widget: string, i18n: true }
+          - { label: "Izdelek: Iz iste skupine", name: sameGroup, widget: string, i18n: true }

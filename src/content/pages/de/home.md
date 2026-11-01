@@ -7,4 +7,8 @@ newsTitle: Neuigkeiten
 galleryTitle: Fotogalerie
 galleryImage: /images/photos/bottles.jpg
 galleryText: ""
+heroImage: /images/gallery/r-02-zelena.jpg
+highlightQuote: Der Olivenflüsterer
+highlightSource: Der Feinschmecker, Olivenöl-Special 2007
+highlightText: Heute ist der Autodidakt der beste Ölmacher in Osteuropa, seine Produkte sind weltweit begehrt.
 ---

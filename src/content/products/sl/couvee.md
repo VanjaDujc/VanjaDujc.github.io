@@ -6,6 +6,10 @@ size: 0,5 L / 0,25 L
 images:
   - /images/products/couvee-05l.jpg
   - /images/products/couvee-025l.jpg
+taste:
+  fruity: 3
+  bitter: 3
+  pungent: 3
 ---
 
 **COUVÉE**  

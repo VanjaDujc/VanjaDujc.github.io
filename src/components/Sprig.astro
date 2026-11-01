@@ -1,0 +1,19 @@
+---
+// Small hand-drawn olive sprig, used next to section titles and in dividers.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg class:list={['sprig', className]} viewBox="0 0 64 24" width="48" height="18" aria-hidden="true">
+  <path d="M2 15 C 16 13, 34 12, 62 7" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+  <g fill="currentColor">
+    <ellipse cx="13" cy="10" rx="6" ry="1.9" transform="rotate(-24 13 10)"></ellipse>
+    <ellipse cx="18" cy="17.5" rx="6" ry="1.9" transform="rotate(22 18 17.5)"></ellipse>
+    <ellipse cx="31" cy="7.5" rx="6.5" ry="2" transform="rotate(-20 31 7.5)"></ellipse>
+    <ellipse cx="36" cy="15.6" rx="6.5" ry="2" transform="rotate(18 36 15.6)"></ellipse>
+    <ellipse cx="51" cy="4.6" rx="6" ry="1.8" transform="rotate(-14 51 4.6)"></ellipse>
+  </g>
+  <ellipse class="sprig-olive" cx="46" cy="13.4" rx="3" ry="3.8"></ellipse>
+</svg>

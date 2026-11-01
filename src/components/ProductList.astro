@@ -1,13 +1,14 @@
 ---
-// Product overview grouped by category, as in the right column of the old "Kaj nudimo" page.
+// All products of a language, grouped by category, each group as a shelf.
 import { getCollection } from 'astro:content';
-import { localeUrl, splitId, ui, type Locale } from '../i18n';
+import Shelf from './Shelf.astro';
+import Sprig from './Sprig.astro';
+import { splitId, ui, type Locale } from '../i18n';
 
 interface Props {
   locale: Locale;
-  current?: string;
 }
-const { locale, current } = Astro.props;
+const { locale } = Astro.props;
 const t = ui[locale];
 
 const products = (await getCollection('products'))
@@ -26,22 +27,11 @@ const groups = [
 {
   groups.map((group) => (
     <section class="product-group">
-      <h2>{group.title}</h2>
-      <ul class="product-list">
-        {group.items.map((p) => {
-          const href = localeUrl(locale, `products/${splitId(p.id).slug}/`);
-          return (
-            <li class:list={{ current: splitId(p.id).slug === current }}>
-              <a class="thumbs" href={href}>
-                {p.data.images.map((src) => (
-                  <img src={src} alt={p.data.title} width="56" height="56" />
-                ))}
-              </a>
-              <a href={href}>{p.data.title}</a>
-            </li>
-          );
-        })}
-      </ul>
+      <h2 class="section-title">
+        <Sprig />
+        {group.title}
+      </h2>
+      <Shelf locale={locale} items={group.items} />
     </section>
   ))
 }

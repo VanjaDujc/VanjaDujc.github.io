@@ -1,0 +1,27 @@
+---
+// Products standing side by side like bottles on a shelf.
+import type { CollectionEntry } from 'astro:content';
+import { localeUrl, splitId, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  items: CollectionEntry<'products'>[];
+}
+const { locale, items } = Astro.props;
+---
+
+<ul class="shelf">
+  {
+    items.map((p) => (
+      <li>
+        <a href={localeUrl(locale, `products/${splitId(p.id).slug}/`)}>
+          <span class="shelf-photo">
+            {p.data.images[0] && <img src={p.data.images[0]} alt="" loading="lazy" />}
+          </span>
+          <span class="shelf-name">{p.data.title}</span>
+          {p.data.size && <span class="shelf-size">{p.data.size}</span>}
+        </a>
+      </li>
+    ))
+  }
+</ul>

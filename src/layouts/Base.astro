@@ -1,9 +1,16 @@
 ---
-// Page frame from the original site: header with logo, flags and menu,
-// a 360px left column (bottle photo / side text) and a 590px content column.
+// Page frame: textured header with logo and menu, paper content area, textured footer.
+// layout "columns" keeps the old bottle photo column on the left; "wide" gives the page the full width.
+import '@fontsource/alegreya/500.css';
+import '@fontsource/alegreya/700.css';
+import '@fontsource/alegreya/500-italic.css';
+import '@fontsource/alegreya-sans/400.css';
+import '@fontsource/alegreya-sans/400-italic.css';
+import '@fontsource/alegreya-sans/500.css';
+import '@fontsource/alegreya-sans/700.css';
 import '../styles/site.css';
 import Markdown from '../components/Markdown.astro';
-import { LOCALES, MENU, pageUrl, ui, type Locale, type PageKey } from '../i18n';
+import { FOOTER_MENU, LOCALES, MENU, pageUrl, ui, type Locale, type PageKey } from '../i18n';
 
 interface Props {
   locale: Locale;
@@ -13,15 +20,13 @@ interface Props {
   alternates: Record<Locale, string>;
   activeMenu?: PageKey;
   sideImage?: string;
-  // on phones, show the left column before the content (product details)
-  asideFirst?: boolean;
+  layout?: 'columns' | 'wide';
 }
 
-const { locale, title, description, alternates, activeMenu, sideImage, asideFirst = false } = Astro.props;
+const { locale, title, description, alternates, activeMenu, sideImage, layout = 'columns' } = Astro.props;
 const t = ui[locale];
-const pageTitle = title && title !== t.siteTitle ? `${t.siteTitle} | ${title}` : t.siteTitle;
+const pageTitle = title && title !== t.siteTitle ? `${title} | ${t.siteTitle}` : t.siteTitle;
 const site = Astro.site ?? Astro.url;
-const hasAside = Astro.slots.has('aside');
 ---
 
 <!doctype html>
@@ -31,65 +36,103 @@ const hasAside = Astro.slots.has('aside');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description || t.siteTitle} />
+    <meta name="theme-color" content="#29200f" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="canonical" href={new URL(Astro.url.pathname, site)} />
     {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(alternates[l], site)} />)}
     <link rel="alternate" hreflang="x-default" href={new URL(alternates.sl, site)} />
   </head>
   <body>
-    <div class="page" id="top">
-      <header class="site-header">
-        <div class="header-top">
-          <a class="logo" href={pageUrl(locale, 'home')}>
-            <img src="/layout/logo.gif" alt="Vanja Dujc" width="151" height="100" />
-          </a>
-          <nav class="languages" aria-label="Language">
-            {
-              LOCALES.filter((l) => l !== locale).map((l) => (
-                <a href={alternates[l]} hreflang={l} lang={l} title={ui[l].languageName}>
-                  <img src={`/layout/flag-${l}.jpg`} alt={ui[l].languageName} width="34" height="24" />
-                </a>
-              ))
-            }
-          </nav>
-        </div>
-        <div class="header-line"></div>
-        <nav class="menu">
-          <ul>
+    <a class="skip" href="#content">↓</a>
+    <header class="site-header" id="top">
+      <div class="wrap bar">
+        <a class="logo" href={pageUrl(locale, 'home')}>
+          <img src="/layout/logo.gif" alt="Vanja Dujc" width="151" height="100" />
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="menu-icon" aria-hidden="true"></span>
+          {t.menu}
+        </button>
+        <nav id="site-nav" class="nav">
+          <ul class="menu">
             {
               MENU.map((item) => (
                 <li>
-                  <a href={pageUrl(locale, item.page)} class:list={{ active: item.page === activeMenu }}>
+                  <a href={pageUrl(locale, item.page)} aria-current={item.page === activeMenu ? 'page' : undefined}>
                     {t[item.label]}
                   </a>
                 </li>
               ))
             }
           </ul>
+          <ul class="langs" aria-label="Language">
+            {
+              LOCALES.map((l) => (
+                <li>
+                  <a
+                    href={alternates[l]}
+                    hreflang={l}
+                    lang={l}
+                    title={ui[l].languageName}
+                    aria-current={l === locale ? 'true' : undefined}
+                  >
+                    {l.toUpperCase()}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
         </nav>
-      </header>
-
-      <div class:list={['columns', { 'aside-first': asideFirst }]}>
-        <aside class:list={['side', { 'has-content': hasAside }]}>
-          {sideImage && <img class="side-image" src={sideImage} alt="" width="360" height="420" />}
-          {
-            hasAside && (
-              <div class="side-content">
-                <slot name="aside" />
-              </div>
-            )
-          }
-        </aside>
-        <main class="main">
-          <div class="content">
-            <slot />
-          </div>
-        </main>
       </div>
+    </header>
+    <div class="chain" aria-hidden="true"></div>
 
-      <footer class="site-footer">
-        <Markdown text={t.footer} inline />
-      </footer>
-    </div>
+    {
+      layout === 'wide' ? (
+        <main id="content" class="wide">
+          <slot />
+        </main>
+      ) : (
+        <div class="paper">
+          <div class="wrap columns">
+            <aside class="side">
+              {sideImage && <img class="side-image" src={sideImage} alt="" width="360" height="420" />}
+              <slot name="aside" />
+            </aside>
+            <main id="content" class="main prose">
+              <slot />
+            </main>
+          </div>
+        </div>
+      )
+    }
+
+    <div class="chain" aria-hidden="true"></div>
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <div class="footer-address">
+          <img src="/layout/logo.gif" alt="" width="76" height="50" />
+          <p><Markdown text={t.footer} inline /></p>
+        </div>
+        <ul class="footer-menu">
+          {
+            FOOTER_MENU.map((item) => (
+              <li>
+                <a href={pageUrl(locale, item.page)}>{t[item.label]}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector('.menu-toggle');
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!open));
+        document.body.classList.toggle('nav-open', !open);
+      });
+    </script>
   </body>
 </html>

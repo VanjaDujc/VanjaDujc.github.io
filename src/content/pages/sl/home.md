@@ -7,4 +7,8 @@ newsTitle: Zadnja novica
 galleryTitle: Fotogalerija
 galleryImage: /images/photos/bottles.jpg
 galleryText: Oglejte si galerijo fotografij ... (v pripravi)
+heroImage: /images/gallery/r-02-zelena.jpg
+highlightQuote: Vanja Dujc je svetovni oljkarski prvak
+highlightSource: Delo, 19. 11. 2010
+highlightText: Koprski oljkar Vanja Dujc je postal svetovni prvak po kakovosti svojega ekstra deviškega oljčnega olja. Edino priznanje šampiona in prvo mesto je osvojil na prvem svetovnem prvenstvu oljčnih olj, ki so ga organizirali na prizorišču svetovne razstave EXPO 2010 v Shanghaiju.
 ---

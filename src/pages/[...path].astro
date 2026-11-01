@@ -6,7 +6,11 @@ import { marked } from 'marked';
 import Base from '../layouts/Base.astro';
 import Markdown from '../components/Markdown.astro';
 import ProductList from '../components/ProductList.astro';
+import Shelf from '../components/Shelf.astro';
+import Sprig from '../components/Sprig.astro';
+import TasteProfile from '../components/TasteProfile.astro';
 import {
+  CONTACT,
   LOCALES,
   PAGE_PATHS,
   formatDate,
@@ -69,12 +73,14 @@ const t = ui[locale];
 const ofLocale = <T extends { id: string }>(items: T[]) => items.filter((e) => splitId(e.id).locale === locale);
 const pageEntry = async (page: PageKey) =>
   (await getCollection('pages')).find((p) => p.id === `${locale}/${page}`) as CollectionEntry<'pages'>;
-const excerpt = (markdown = '', length = 230) => {
-  const text = (marked.parse(markdown) as string)
+const plainText = (markdown = '') =>
+  (marked.parse(markdown) as string)
     .replace(/<[^>]+>/g, ' ')
     .replace(/&(#39|quot|amp|lt|gt);/g, (m, e) => ({ '#39': "'", quot: '"', amp: '&', lt: '<', gt: '>' })[e as string]!)
     .replace(/\s+/g, ' ')
     .trim();
+const excerpt = (markdown = '', length = 230) => {
+  const text = plainText(markdown);
   return text.length > length ? text.slice(0, text.lastIndexOf(' ', length)) : text;
 };
 
@@ -83,10 +89,16 @@ const { Content, headings } = await render(entry);
 // Fixed page data, and for detail pages the page they belong to (for heading, menu and side photo)
 const parentPage: Record<string, PageKey> = { product: 'products', recipe: 'recipes', newsItem: 'news' };
 const page = view in parentPage ? await pageEntry(parentPage[view]) : (entry as CollectionEntry<'pages'>);
-const activeMenu: PageKey =
-  view === 'product' ? 'products' : view === 'recipe' ? 'recipes' : view in PAGE_PATHS ? (view as PageKey) : 'home';
-const menuFor: Partial<Record<string, PageKey>> = { about: 'home', news: 'home', gallery: 'home', newsItem: 'home' };
+const menuFor: Partial<Record<string, PageKey>> = {
+  product: 'products',
+  recipe: 'recipes',
+  newsItem: 'news',
+  home: undefined,
+};
+const activeMenu = view in menuFor ? menuFor[view] : (view as PageKey);
+const wide = ['home', 'products', 'product'].includes(view);
 
+const products = ofLocale(await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
 const news = ofLocale(await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const recipes = ofLocale(await getCollection('recipes')).sort((a, b) => a.data.order - b.data.order);
 const awards = await Promise.all(
@@ -94,131 +106,295 @@ const awards = await Promise.all(
     .sort((a, b) => a.data.order - b.data.order)
     .map(async (a) => ({ ...a, Content: (await render(a)).Content })),
 );
-const latest = news[0];
 const newsUrl = (n: CollectionEntry<'news'>) => localeUrl(locale, `news/${splitId(n.id).slug}/`);
+const productsPage = await pageEntry('products');
+
+// Home page: the opening of the "about" story and the most recent year of each award
+const about = view === 'home' ? await pageEntry('about') : undefined;
+const story = (() => {
+  const text = plainText(about?.body).replace(/^(Kdo smo\?|Who are we\?)\s*/, '');
+  const cut = text.indexOf('. ', 420);
+  return cut > 0 ? text.slice(0, cut + 1) : text;
+})();
+const awardYears = awards
+  .map((a) => ({ title: a.data.title, year: (a.body ?? '').match(/\b(19|20)\d{2}\b/)?.[0] ?? '' }))
+  .filter((a) => a.year)
+  .slice(0, 6);
+
+// Product page
+const product = view === 'product' ? (entry as CollectionEntry<'products'>) : undefined;
+const sizeLabels = product?.data.size?.split('/').map((s) => s.trim()) ?? [];
+const categoryLabel = product
+  ? { basic: t.categoryBasic, supplementary: t.categorySupplementary, gift: t.categoryGift }[product.data.category]
+  : '';
+const sameGroup = product
+  ? products.filter((p) => p.data.category === product.data.category && p.id !== product.id)
+  : [];
 
 const title = entry.data.title;
 ---
 
 <Base
   locale={locale}
-  title={title}
+  title={view === 'home' ? '' : title}
   description={'description' in entry.data ? entry.data.description : undefined}
   alternates={alternates}
-  activeMenu={menuFor[view] ?? activeMenu}
-  sideImage={view === 'product' ? undefined : page.data.sideImage}
-  asideFirst={view === 'product'}
+  activeMenu={activeMenu}
+  sideImage={page.data.sideImage}
+  layout={wide ? 'wide' : 'columns'}
 >
-  {
-    view === 'product' && (
-      <Fragment slot="aside">
-        <div class="product-box">
-          <p class="name">{entry.data.title}</p>
-          {'size' in entry.data && entry.data.size && <p class="size">{entry.data.size}</p>}
-          {'images' in entry.data && entry.data.images[0] && (
-            <img src={entry.data.images[0]} alt={entry.data.title} width="360" height="360" />
-          )}
-          {'images' in entry.data && entry.data.images.length > 1 && (
-            <div class="more-images">
-              {entry.data.images.slice(1).map((src) => (
-                <img src={src} alt={entry.data.title} loading="lazy" />
-              ))}
-            </div>
-          )}
-        </div>
-        <Content />
-      </Fragment>
-    )
-  }
-  {
-    view === 'products' && page.data.sidebar && (
-      <Fragment slot="aside">
-        <Markdown text={page.data.sidebar} />
-      </Fragment>
-    )
-  }
-
   {
     view === 'home' && (
       <>
-        <h1>{page.data.title}</h1>
-        <div class="teaser">
-          {page.data.introImage && (
-            <a href={pageUrl(locale, 'about')}>
-              <img src={page.data.introImage} alt="" width="125" height="75" />
-            </a>
-          )}
-          <div class="text">
-            <p>{page.data.intro}</p>
-            <p class="right">
-              <a href={pageUrl(locale, 'about')}>{t.more}</a>
-            </p>
-          </div>
-        </div>
-        <Content />
-
-        {latest && (
-          <>
-            <hr />
-            <h1>{page.data.newsTitle}</h1>
-            <p>
-              <a class="latest-title" href={newsUrl(latest)}>
-                {latest.data.title}
-              </a>
-            </p>
-            <p>
-              {excerpt(latest.body)} <a href={newsUrl(latest)}>...</a>
-              <br />
-              {formatDate(latest.data.date)}
-            </p>
-            <p class="right">
-              <a href={newsUrl(latest)}>{t.more}</a>
-              <br />
-              <a href={pageUrl(locale, 'news')}>{t.otherNews}</a>
-            </p>
-          </>
-        )}
-
-        {page.data.galleryTitle && (
-          <>
-            <hr />
-            <h1>{page.data.galleryTitle}</h1>
-            <div class="teaser">
-              {page.data.galleryImage && (
-                <a href={pageUrl(locale, 'gallery')}>
-                  <img src={page.data.galleryImage} alt="" width="125" height="75" />
+        <section class="hero">
+          <div class="wrap">
+            <div>
+              <p class="eyebrow">{t.since}</p>
+              <h1>{page.data.title}</h1>
+              <p class="lead">{page.data.intro}</p>
+              <div class="actions">
+                <a class="button" href={pageUrl(locale, 'products')}>
+                  {t.ourOils}
                 </a>
-              )}
-              <div class="text">
-                {page.data.galleryText && <p>{page.data.galleryText}</p>}
-                <p class="right">
-                  <a href={pageUrl(locale, 'gallery')}>{t.more}</a>
-                </p>
+                <a class="button ghost" href={pageUrl(locale, 'contact')}>
+                  {t.navContact}
+                </a>
               </div>
             </div>
-          </>
-        )}
+            {page.data.heroImage && (
+              <figure class="framed">
+                <img src={page.data.heroImage} alt="" width="800" height="600" />
+              </figure>
+            )}
+          </div>
+        </section>
+
+        <section class="story on-dark">
+          <div class="wrap">
+            <img src={page.data.sideImage} alt="" width="300" height="350" loading="lazy" />
+            <div class="story-text">
+              <h2>{t.navAbout}</h2>
+              <p>{story}</p>
+              <a class="more" href={pageUrl(locale, 'about')}>
+                {t.aboutUs}
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="band paper">
+          <div class="wrap">
+            <div class="band-head">
+              <h2 class="section-title">
+                <Sprig />
+                {t.ourOils}
+              </h2>
+              <a class="more" href={pageUrl(locale, 'products')}>
+                {t.allProducts}
+              </a>
+            </div>
+            <Shelf locale={locale} items={products.filter((p) => p.data.category === 'basic')} />
+          </div>
+        </section>
+
+        <section class="band mid">
+          <div class="wrap press">
+            {page.data.highlightQuote && (
+              <blockquote>
+                <p class="quote">„{page.data.highlightQuote}“</p>
+                {page.data.highlightText && <p>{page.data.highlightText}</p>}
+                <cite>{page.data.highlightSource}</cite>
+                <p>
+                  <a class="more" href={pageUrl(locale, 'press')}>
+                    {t.fromPress}
+                  </a>
+                </p>
+              </blockquote>
+            )}
+            <div>
+              <h2 class="small-title">{t.navAwards}</h2>
+              <ul class="award-list">
+                {awardYears.map((a) => (
+                  <li>
+                    <span class="year">{a.year}</span>
+                    <span>{a.title}</span>
+                  </li>
+                ))}
+              </ul>
+              <a class="more" href={pageUrl(locale, 'awards')}>
+                {t.allAwards}
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="band paper">
+          <div class="wrap duo">
+            <div>
+              <h2 class="section-title">
+                <Sprig />
+                {t.fromKitchen}
+              </h2>
+              <ul class="recipe-teaser">
+                {recipes.slice(0, 5).map((r) => (
+                  <li>
+                    <a href={localeUrl(locale, `recipes/${splitId(r.id).slug}/`)}>{r.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+              <a class="more" href={pageUrl(locale, 'recipes')}>
+                {t.allRecipes}
+              </a>
+            </div>
+            <figure class="framed gallery-teaser">
+              <a href={pageUrl(locale, 'gallery')}>
+                <img src="/images/gallery/r-31-soncni-zahod.jpg" alt="" width="800" height="600" loading="lazy" />
+              </a>
+              <figcaption>
+                <a class="more" href={pageUrl(locale, 'gallery')}>
+                  {page.data.galleryTitle || t.galleryLink}
+                </a>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="visit on-dark">
+          <div class="wrap">
+            <div>
+              <h2>{t.buyTitle}</h2>
+              <p>{t.buyText}</p>
+              <div class="links">
+                <a href={`${pageUrl(locale, 'products')}#where-to-buy`}>{t.whereToBuy}</a>
+                <a href={pageUrl(locale, 'contact')}>{t.directions}</a>
+              </div>
+            </div>
+            <div class="actions">
+              {CONTACT.phones.map((p) => (
+                <a class="button" href={`tel:${p.tel}`}>
+                  {t.call} {p.name} <small>{p.display}</small>
+                </a>
+              ))}
+              <a class="button ghost" href={`mailto:${CONTACT.email}`}>
+                {t.email}
+              </a>
+            </div>
+          </div>
+        </section>
       </>
     )
   }
 
   {
     view === 'products' && (
-      <>
-        <h1>{title}</h1>
-        <ProductList locale={locale} />
-        <hr />
-        <Content />
-      </>
+      <section class="band paper">
+        <div class="wrap">
+          <h1>{title}</h1>
+          <ProductList locale={locale} />
+          <hr />
+          <div class="duo">
+            <div class="prose">
+              <Content />
+            </div>
+            {page.data.sidebar && (
+              <aside class="buy-box on-dark" id="where-to-buy">
+                <h2>{t.buyTitle}</h2>
+                <div class="actions">
+                  {CONTACT.phones.map((p) => (
+                    <a class="button" href={`tel:${p.tel}`}>
+                      {t.call} {p.name}
+                    </a>
+                  ))}
+                </div>
+                <div class="prose">
+                  <Markdown text={page.data.sidebar} />
+                </div>
+              </aside>
+            )}
+          </div>
+        </div>
+      </section>
     )
   }
 
   {
-    view === 'product' && (
-      <>
-        <h1>{page.data.title}</h1>
-        <ProductList locale={locale} current={splitId(entry.id).slug} />
-      </>
+    product && (
+      <section class="band paper">
+        <div class="wrap">
+          <nav class="crumbs">
+            <a href={pageUrl(locale, 'products')}>{t.navProductsShort}</a> / {categoryLabel}
+          </nav>
+          <article class="product">
+            <div class="product-media">
+              <div class="stage">
+                {product.data.images.map((src, i) => (
+                  <img src={src} alt={`${title} ${sizeLabels[i] ?? ''}`} hidden={i > 0} data-image={i} />
+                ))}
+              </div>
+              {product.data.images.length > 1 && sizeLabels.length === product.data.images.length && (
+                <div class="sizes">
+                  <span class="small-title">{t.sizes}</span>
+                  {sizeLabels.map((s, i) => (
+                    <button type="button" data-show={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div class="product-info">
+              <p class="eyebrow">{categoryLabel}</p>
+              <h1>{title}</h1>
+              {product.data.size && <p class="product-size">{product.data.size}</p>}
+              <div class="prose">
+                <Content />
+              </div>
+              {product.data.taste && <TasteProfile locale={locale} taste={product.data.taste} />}
+              <aside class="buy-box on-dark">
+                <h2>{t.buyTitle}</h2>
+                <p>{t.buyText}</p>
+                <div class="actions">
+                  {CONTACT.phones.map((p) => (
+                    <a class="button" href={`tel:${p.tel}`}>
+                      {t.call} {p.name} <small>{p.display}</small>
+                    </a>
+                  ))}
+                  <a class="button ghost" href={`mailto:${CONTACT.email}`}>
+                    {t.email}
+                  </a>
+                </div>
+                {productsPage.data.sidebar && (
+                  <details>
+                    <summary>{t.whereToBuy}</summary>
+                    <Markdown text={productsPage.data.sidebar} />
+                  </details>
+                )}
+              </aside>
+            </div>
+          </article>
+
+          {sameGroup.length > 0 && (
+            <section class="related">
+              <h2 class="section-title">
+                <Sprig />
+                {t.sameGroup}
+              </h2>
+              <Shelf locale={locale} items={sameGroup} />
+            </section>
+          )}
+        </div>
+        <script>
+          document.querySelectorAll<HTMLButtonElement>('.sizes button').forEach((button) => {
+            button.addEventListener('click', () => {
+              const show = button.dataset.show;
+              document.querySelectorAll<HTMLImageElement>('.stage img').forEach((img) => {
+                img.hidden = img.dataset.image !== show;
+              });
+              document.querySelectorAll('.sizes button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+            });
+          });
+        </script>
+      </section>
     )
   }
 
@@ -301,7 +477,7 @@ const title = entry.data.title;
       <>
         <h1>{title}</h1>
         <Content />
-        <ul class="recipe-list">
+        <ul class="recipe-teaser">
           {recipes.map((r) => (
             <li>
               <a href={localeUrl(locale, `recipes/${splitId(r.id).slug}/`)}>{r.data.title}</a>
@@ -315,11 +491,10 @@ const title = entry.data.title;
   {
     view === 'recipe' && (
       <>
-        <h1>{page.data.title}</h1>
-        <p class="right">
-          <a href={pageUrl(locale, 'recipes')}>{t.back}</a>
-        </p>
-        <h2>{title}</h2>
+        <nav class="crumbs">
+          <a href={pageUrl(locale, 'recipes')}>{page.data.title}</a>
+        </nav>
+        <h1>{title}</h1>
         <Content />
       </>
     )
@@ -333,13 +508,13 @@ const title = entry.data.title;
         <ul class="item-list">
           {news.map((n) => (
             <li>
+              <p class="eyebrow">{formatDate(n.data.date)}</p>
               <a class="item-title" href={newsUrl(n)}>
                 {n.data.title}
               </a>
-              <br />
-              {excerpt(n.body, 160)} <a href={newsUrl(n)}>...</a>
-              <br />
-              {formatDate(n.data.date)}
+              <p>
+                {excerpt(n.body, 200)} <a href={newsUrl(n)}>…</a>
+              </p>
             </li>
           ))}
         </ul>
@@ -350,15 +525,11 @@ const title = entry.data.title;
   {
     view === 'newsItem' && (
       <>
-        <h1>{page.data.title}</h1>
-        <p>
-          <strong>{title}</strong>
-        </p>
+        <nav class="crumbs">
+          <a href={pageUrl(locale, 'news')}>{page.data.title}</a> · {formatDate((entry as CollectionEntry<'news'>).data.date)}
+        </nav>
+        <h1>{title}</h1>
         <Content />
-        <p>{formatDate((entry as CollectionEntry<'news'>).data.date)}</p>
-        <p class="right">
-          <a href={pageUrl(locale, 'news')}>{t.otherNews}</a>
-        </p>
       </>
     )
   }
