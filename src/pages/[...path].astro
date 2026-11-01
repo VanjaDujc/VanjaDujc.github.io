@@ -4,6 +4,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { marked } from 'marked';
 import Base from '../layouts/Base.astro';
+import ContactMap from '../components/ContactMap.astro';
 import Gallery from '../components/Gallery.astro';
 import Markdown from '../components/Markdown.astro';
 import ProductList from '../components/ProductList.astro';
@@ -633,10 +634,10 @@ const heading = product?.data.shortName ?? title;
               <img src="/images/gallery/r-31-soncni-zahod.jpg" alt="" width="800" height="600" />
             </figure>
             <p>{t.buyText}</p>
-            <a class="button ghost" href={CONTACT.mapUrl}>
-              {t.openMap}
-            </a>
           </div>
+        </div>
+        <div class="wrap contact-map">
+          <ContactMap locale={locale} />
         </div>
       </section>
     )

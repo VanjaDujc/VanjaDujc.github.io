@@ -52,6 +52,14 @@ Replace them with new photos when they exist. For the shop look, new photos shou
 **600×720 (or larger, same 5:6 shape)**, product standing near the bottom, on a plain
 background close to `#ebe3cc` – or change `--photo-bg` to match the new background.
 
+## Map on the contact page
+
+`public/images/map/dolga-reber.jpg` is a picture made from OpenStreetMap (the credit under the
+map is required by its licence). Clicking it opens Google Maps with the address, so navigation
+always finds the exact house. The **pin position is an estimate** (OpenStreetMap has no house
+numbers for Dolga reber). To move it, change `CONTACT.pin` (latitude, longitude) in
+`src/i18n.ts`; the picture itself doesn't need to change as long as the spot is inside it.
+
 ## Still to do
 
 - New GitHub account/repository: update `backend.repo` in `public/admin/config.yml`.

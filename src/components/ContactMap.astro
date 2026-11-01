@@ -1,0 +1,43 @@
+---
+// Map picture of the farm's surroundings; the whole map is a link that opens Google Maps.
+// The pin is placed on top of the picture from CONTACT.pin, so it can be moved without a new picture.
+import { CONTACT, ui, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = ui[locale];
+const { map, pin } = CONTACT;
+
+// Web Mercator, the projection map tiles use
+const toPixels = (lat: number, lon: number) => {
+  const scale = 256 * 2 ** map.zoom;
+  const r = (lat * Math.PI) / 180;
+  return {
+    x: ((lon + 180) / 360) * scale,
+    y: ((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2) * scale,
+  };
+};
+const centre = toPixels(map.lat, map.lon);
+const point = toPixels(pin.lat, pin.lon);
+const left = ((point.x - centre.x + map.width / 2) / map.width) * 100;
+const top = ((point.y - centre.y + map.height / 2) / map.height) * 100;
+---
+
+<figure class="map">
+  <a href={CONTACT.mapUrl} target="_blank" rel="noopener">
+    <!-- the picture keeps its own proportions inside a shorter frame, so the pin stays on its spot -->
+    <span class="map-canvas" style={`aspect-ratio:${map.width}/${map.height}`}>
+      <img src={map.image} alt={`${t.openMap}: Dolga reber 4, 6000 Koper`} width={map.width} height={map.height} loading="lazy" />
+      <svg class="map-pin" style={`left:${left}%;top:${top}%`} viewBox="-16 -46 32 48" width="32" height="48" aria-hidden="true">
+        <path d="M0 0 C -4 -10 -14 -16 -14 -30 A 14 14 0 1 1 14 -30 C 14 -16 4 -10 0 0Z"></path>
+        <circle cy="-30" r="5.5"></circle>
+      </svg>
+    </span>
+    <span class="map-label">{t.openMap} ↗</span>
+  </a>
+  <figcaption>
+    © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+  </figcaption>
+</figure>

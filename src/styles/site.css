@@ -1226,7 +1226,75 @@ hr {
   font-size: 1.15rem;
 }
 .contact-side p {
-  margin: 34px 0 16px;
+  margin: 22px 0 16px;
+}
+
+.contact-map {
+  margin-top: clamp(36px, 6vw, 64px);
+}
+.map {
+  margin: 0;
+}
+.map > a {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  height: clamp(300px, 42vw, 440px);
+}
+/* full-size picture centred in the frame; edges that don't fit are cut off */
+.map-canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 1200px);
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s ease;
+}
+.map img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.map > a:hover .map-canvas {
+  transform: translate(-50%, -50%) scale(1.02);
+}
+.map-pin {
+  position: absolute;
+  width: 32px;
+  height: 48px;
+  margin: -46px 0 0 -16px;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.35));
+}
+.map-pin path {
+  fill: var(--wine);
+  stroke: var(--paper);
+  stroke-width: 2.5;
+}
+.map-pin circle {
+  fill: var(--paper);
+}
+.map-label {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: var(--wine);
+  color: var(--paper);
+  padding: 7px 14px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+.map > a:hover .map-label {
+  background: var(--wine-hover);
+}
+.map figcaption {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: right;
+  margin-top: 4px;
+}
+.map figcaption a {
+  color: var(--muted);
 }
 
 /* ---------- FAQ ---------- */
