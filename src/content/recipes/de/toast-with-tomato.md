@@ -1,6 +1,7 @@
 ---
 title: Toast mit Tomaten
 order: 2
+course: starter
 servings: für 4 Personen
 ingredients: |-
   - 4 Vollkornbrotschnitten

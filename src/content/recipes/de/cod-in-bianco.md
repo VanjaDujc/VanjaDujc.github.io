@@ -1,6 +1,7 @@
 ---
 title: Stockfisch "in bianco" a la Vanja Dujc
 order: 1
+course: main
 ingredients: |-
   - 500 g getrockneten Stockfisch
   - 3 frische Lorbeerblätter

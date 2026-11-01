@@ -1,6 +1,7 @@
 ---
 title: Gebratene Äpfel mit Zitronen-Olivenöl
 order: 13
+course: dessert
 oil: lemon-oil
 ingredients: |-
   - 4 Äpfel

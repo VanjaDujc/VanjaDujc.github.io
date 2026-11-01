@@ -56,5 +56,16 @@
   "close": "Close",
   "previous": "Previous",
   "next": "Next",
-  "photoStrip": "From our olive grove"
+  "photoStrip": "From our olive grove",
+  "ourStory": "Our story",
+  "courseStarter": "Starters",
+  "coursePasta": "Pasta and risotto",
+  "courseMain": "Main courses",
+  "courseDessert": "Desserts",
+  "searchFaq": "Search the questions …",
+  "questionsCount": "questions",
+  "openAll": "Open all",
+  "closeAll": "Close all",
+  "noResults": "Nothing found.",
+  "questions": "Questions"
 }

@@ -1,6 +1,7 @@
 ---
 title: Bacalao "in bianco" a la Vanja Dujc
 order: 1
+course: main
 ingredients: |-
   - 500 g dried cod or bacalao
   - 3 leaves fresh bay leaf

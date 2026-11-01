@@ -1,6 +1,7 @@
 ---
 title: Opečen kruh s paradižnikom (»Tostadas con tomate«, Španija)
 order: 2
+course: starter
 servings: za štiri osebe
 ingredients: |-
   - štiri rezine polnozrnatega kruha

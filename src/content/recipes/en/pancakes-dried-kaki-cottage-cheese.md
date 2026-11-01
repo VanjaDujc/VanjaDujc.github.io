@@ -1,6 +1,7 @@
 ---
 title: Pancakes with dried kaki and cottage cheese
 order: 15
+course: dessert
 oil: orange-oil
 ingredients: |-
   For pancakes:

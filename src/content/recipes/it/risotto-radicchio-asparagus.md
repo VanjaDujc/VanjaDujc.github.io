@@ -1,6 +1,7 @@
 ---
 title: Risotto con radicchio Tarvisio e asparaghi
 order: 7
+course: pasta
 ingredients: |-
   - 2 tasse del riso
   - 2 pezzi del radicchio Tarvisio

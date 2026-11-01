@@ -1,6 +1,7 @@
 ---
 title: Orange mit Olivenöl („Naranja con aceite de oliva“, Spanien)
 order: 4
+course: starter
 servings: für 4 Personen
 ingredients: |-
   - 2 Orangen

@@ -1,6 +1,7 @@
 ---
 title: Gebratene Seezungen mit Kartoffel auf dalmatinisch
 order: 10
+course: main
 oil: lemon-oil
 ingredients: |-
   Für Seezungen:

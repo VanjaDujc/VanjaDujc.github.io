@@ -1,6 +1,7 @@
 ---
 title: Le pesche arrostite alla griglia con dolce versamento
 order: 14
+course: dessert
 oil: orange-oil
 ingredients: |-
   - 4 pesche mature

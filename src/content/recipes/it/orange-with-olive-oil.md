@@ -1,6 +1,7 @@
 ---
 title: La arancia con l'olio d'oliva (»Naranja con aceite de oliva«)
 order: 4
+course: starter
 servings: per quattro persone
 ingredients: |-
   - 2 arance

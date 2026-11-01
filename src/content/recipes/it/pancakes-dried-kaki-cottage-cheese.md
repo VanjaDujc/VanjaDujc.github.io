@@ -1,6 +1,7 @@
 ---
 title: Le ripiene con le mele d'oro secche e con ricotta
 order: 15
+course: dessert
 oil: orange-oil
 ingredients: |-
   **Per le ripiene:**

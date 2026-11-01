@@ -1,6 +1,7 @@
 ---
 title: Tagliatelle (Bandnudeln) mit Trüffeln
 order: 8
+course: pasta
 ingredients: |-
   - 500g Tagliatelle (Bandnudeln)
   - 2 frische oder gefrorene Trüffeln

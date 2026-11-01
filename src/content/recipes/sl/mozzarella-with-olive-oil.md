@@ -1,6 +1,7 @@
 ---
 title: Mocarela z oljčnim oljem
 order: 6
+course: starter
 servings: za štiri osebe
 ingredients: |-
   - 200 g mocarele

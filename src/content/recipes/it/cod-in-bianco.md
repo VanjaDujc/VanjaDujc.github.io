@@ -1,6 +1,7 @@
 ---
 title: Il baccalà »in bianco« à la Vanja Dujc
 order: 1
+course: main
 ingredients: |-
   - 500 gr di baccalà secco (stoccafisso)
   - 3 fogli d'alloro fresco

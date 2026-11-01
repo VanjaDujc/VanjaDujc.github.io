@@ -1,6 +1,7 @@
 ---
 title: Risotto mit Chicoree Tarvisio und Spargeln
 order: 7
+course: pasta
 ingredients: |-
   - 2 Tassen Reis
   - 2 Köpfe Chicoree Tarvisio

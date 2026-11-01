@@ -1,25 +1,37 @@
 ---
 title: About us
 sideImage: /images/sidebar/bottle-2.jpg
+heroImage: /images/gallery/r-22-alenka.jpg
+milestones:
+  - year: "1984"
+    text: In summer Vanja plants his first 600 olive trees.
+  - year: "1985"
+    text: All the trees freeze in winter – Vanja doesn’t give up and plants again.
+  - year: "2000"
+    text: Olive growing becomes Vanja’s only job.
+  - year: "2003"
+    text: "First important recognition: Grand Mention Diploma at Sol in Verona."
+  - year: "2006"
+    text: Daughter Lena starts working on the farm.
+  - year: "2010"
+    text: World champion at the first world olive oil championship, EXPO 2010 in Shanghai.
+  - year: Today
+    text: 1050 trees on 3.5 hectares of terraces on Mala Seva.
 ---
 
-**Who are we?**
+## Who are we?
 
 The hart of the farm: Vanja Dujc, “olive oil professor” and “guru”, as he was named by the Austrian weekly magazine Profil. In 1984 he has the feeling that ex Yugoslav economical system may collapse and decides to plant an olive grove just in case. In the summer of 1984 he plants his first 600 trees without knowing much more about olives than they are tasty on pizza. All the trees freeze the next winter. He doesn’t give up, plants new trees and slowly expands until the total number of trees reaches the present 1050. Olive growing, first perceived as a hobby, becomes a passion which, by hook or by crook, contaminates other family members: his wife Vesna, son Luka and daughter Lena and finally his son in law Robi and daughter in law Martina. As years pass by Vanja recognises that either he devotes to olive growing professionally or his olive oil will never become world’s top extra virgin. In 2000 olive growing becomes his only job. In 2003 his olive oil receives first important international recognition: Grand Mention Diploma on the fair Sol in Verona (Italy). After that, receiving medals and awards becomes obvious for Vanja’s oil. By the end of 2006 Lena gets the job on the farm. New ideas are coming up, new types of extra virgin olive oils and new products are produced, but the main goal remains the same: to produce the best extra virgin. When it is necessary, Luka and Robi come and help on the farm, while other family members give us a hand when their time and dreams allow them to.
 
----
+## Credo
 
-Credo
-
-![](/images/photos/sunset.jpg)
+![](/images/gallery/r-02-zelena.jpg)
 
 Nature friendly production, supreme quality of our products, care for native cultivars from the area of Slovene Istria.
 
----
-
 ## Our knowledge and experience
 
-![](/images/photos/olives.jpg)
+![](/images/gallery/r-19-ana-magda.jpg)
 
 Our knowledge is based on works, written by world known experts in the field of olive growing (Alessandro Morettini, Claudio Cantini, Riccardo Gucci, Rugero Petacchi, Pavle Bakarič, Stanko Štambuk, France Adamič, Luigi Braconi) but we are continuously acquiring new knowledge on professional meetings, organised in Slovenia, Croatia and Italy.
 
@@ -37,13 +49,11 @@ Our personal experience is the best guarantee for the quality of our products:
 
 We are founder-members of the Association of Olive Growers Štorta, of the Union of Olive Oil Producers from Slovenia, of the Olive co-op Oleum Nostrum, members of the Association of olive Growers from Slovene Istria (DOSI) and founder members of EX OLEA, an international association of high quality extra virgin olive oil producers.
 
----
-
 ## About our olive grove and our oil
 
-![](/images/photos/orchard.jpg)  
+![](/images/gallery/r-27-odvoz.jpg)
 
-![](/images/photos/orchard-2.jpg)
+![](/images/gallery/r-05-crna.jpg)
 
 Our olive grove lays on the Southern-Western slopes of Mala Seva, in the hilly countryside above Portorož, a tourist resort on the Slovene coast. On the terraced ground, comprising about 3,5 ha, some 1050 olive trees, aging from 8 to 21 years, are growing. The Southern-Western position, the quality of the soil and a clean and windy environment create favourable conditions for olive growing. We decided for a wide range of cultivars. Our main cultivars are Istrska belica (Istrian White), Italian cultivars Leccino, Maurino, and Itrana, but we also have some Pendolino, Leccio, Leccio di Corno, Frantoio, Moraiolo and some cultivars that are typical of the area of Slovene Istra: Piranska buga, Piranska Žižola. We also have some cultivars for table olives production: Ascolana tenera, Santa Caterina and Piranska Štorta. Good climate conditions, prudent assortment of cultivars, knowledge and hard work guarantee the top quality of our products.
 

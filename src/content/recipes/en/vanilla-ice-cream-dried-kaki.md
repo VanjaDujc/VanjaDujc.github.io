@@ -1,6 +1,7 @@
 ---
 title: Vanilla ice cream with dried kaki (Japanese Persimmons) in orange flavoured olive oil
 order: 12
+course: dessert
 oil: orange-oil
 ingredients: |-
   - 400 g vanilla ice cream

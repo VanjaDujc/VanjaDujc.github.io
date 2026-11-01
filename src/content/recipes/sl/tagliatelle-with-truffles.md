@@ -1,6 +1,7 @@
 ---
 title: Tagliatelle s tartufi
 order: 8
+course: pasta
 ingredients: |-
   - 500 gr testenin tagliatelle
   - 2 sveža ali zamrznjena tartufa

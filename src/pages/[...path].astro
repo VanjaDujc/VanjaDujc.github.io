@@ -99,7 +99,7 @@ const menuFor: Partial<Record<string, PageKey>> = {
   home: undefined,
 };
 const activeMenu = view in menuFor ? menuFor[view] : (view as PageKey);
-const wide = ['home', 'products', 'product', 'recipe', 'contact', 'awards'].includes(view);
+const wide = ['home', 'products', 'product', 'recipe', 'contact', 'awards', 'about', 'recipes', 'faq'].includes(view);
 
 const products = ofLocale(await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
 const productBySlug = (slug?: string) => products.find((p) => slugOf(p) === slug);
@@ -172,6 +172,41 @@ const faqSections =
           return m ? { id: m[1], question: m[2], answer: m[3] } : { id: '', question: '', answer: part };
         })
     : [];
+
+const faqQuestions = faqSections.filter((s) => s.question);
+
+// About: the text is split at its ## headings; photos inside a section are shown beside it
+const aboutSections =
+  view === 'about'
+    ? (entry.rendered?.html ?? '')
+        .split(/(?=<h2[\s>])/)
+        .map((part) => {
+          const m = part.match(/^<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*)$/);
+          if (!m) return undefined;
+          const photos = [...m[2].matchAll(/<img[^>]*src="([^"]+)"[^>]*>/g)].map((x) => x[1]);
+          const html = m[2].replace(/<p>\s*(<img[^>]*>\s*)+<\/p>/g, '').replace(/<img[^>]*>/g, '');
+          return { title: m[1], html, photos, short: html.replace(/<[^>]+>/g, '').trim().length < 260 };
+        })
+        .filter((s) => s !== undefined)
+    : [];
+const [aboutStory, ...aboutRest] = aboutSections;
+
+// Recipes: grouped by course, each card shows the first ingredients
+const courses = [
+  { id: 'starter', label: t.courseStarter },
+  { id: 'pasta', label: t.coursePasta },
+  { id: 'main', label: t.courseMain },
+  { id: 'dessert', label: t.courseDessert },
+]
+  .map((c) => ({ ...c, items: recipes.filter((r) => r.data.course === c.id) }))
+  .filter((c) => c.items.length);
+const ingredientPreview = (r: CollectionEntry<'recipes'>) =>
+  (r.data.ingredients ?? '')
+    .split('\n')
+    .filter((line) => /^\s*-\s/.test(line))
+    .map((line) => line.replace(/^\s*-\s*/, '').replace(/[*_]/g, '').trim())
+    .slice(0, 4)
+    .join(' · ');
 
 const title = entry.data.title;
 const heading = product?.data.shortName ?? title;
@@ -645,30 +680,87 @@ const heading = product?.data.shortName ?? title;
 
   {
     view === 'faq' && (
-      <>
-        <h1>{title}</h1>
-        <div class="faq">
-          {faqSections.map((s) =>
-            s.question ? (
-              <details id={s.id}>
-                <summary set:html={s.question} />
-                <div class="answer" set:html={s.answer} />
-              </details>
-            ) : (
-              <Fragment set:html={s.answer} />
-            ),
-          )}
+      <section class="band paper">
+        <div class="wrap">
+          <header class="faq-head">
+            <div>
+              <p class="eyebrow">
+                {faqQuestions.length} {t.questionsCount}
+              </p>
+              <h1>{title}</h1>
+            </div>
+            <div class="faq-tools">
+              <input class="faq-search" type="search" placeholder={t.searchFaq} aria-label={t.searchFaq} />
+              <button class="button ghost faq-toggle" type="button" data-open={t.openAll} data-close={t.closeAll}>
+                {t.openAll}
+              </button>
+            </div>
+          </header>
+          <div class="faq-layout">
+            <nav class="faq-index" aria-label={t.questions}>
+              <ol>
+                {faqQuestions.map((s) => (
+                  <li data-for={s.id}>
+                    <a href={`#${s.id}`} set:html={s.question} />
+                  </li>
+                ))}
+              </ol>
+            </nav>
+            <div class="faq prose">
+              {faqSections.map((s) =>
+                s.question ? (
+                  <details id={s.id}>
+                    <summary set:html={s.question} />
+                    <div class="answer" set:html={s.answer} />
+                  </details>
+                ) : (
+                  <Fragment set:html={s.answer} />
+                ),
+              )}
+              <p class="faq-empty" hidden>
+                {t.noResults}
+              </p>
+            </div>
+          </div>
         </div>
         <script>
+          const items = [...document.querySelectorAll<HTMLDetailsElement>('.faq details')];
+          const index = [...document.querySelectorAll<HTMLLIElement>('.faq-index li')];
+          const plain = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
           // opening a question from a link (e.g. /faq/#question) unfolds it
-          const open = () => {
+          const openFromHash = () => {
             const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
             if (target instanceof HTMLDetailsElement) target.open = true;
           };
-          open();
-          window.addEventListener('hashchange', open);
+          openFromHash();
+          window.addEventListener('hashchange', openFromHash);
+
+          // search in questions and answers
+          const search = document.querySelector<HTMLInputElement>('.faq-search')!;
+          const empty = document.querySelector<HTMLElement>('.faq-empty')!;
+          search.addEventListener('input', () => {
+            const q = plain(search.value.trim());
+            let shown = 0;
+            items.forEach((d) => {
+              const hit = !q || plain(d.textContent ?? '').includes(q);
+              d.hidden = !hit;
+              if (hit) shown++;
+              if (q && hit && plain(d.querySelector('.answer')?.textContent ?? '').includes(q)) d.open = true;
+            });
+            index.forEach((li) => (li.hidden = !!document.getElementById(li.dataset.for!)?.hidden));
+            empty.hidden = shown > 0;
+          });
+
+          // open / close all answers
+          const toggle = document.querySelector<HTMLButtonElement>('.faq-toggle')!;
+          toggle.addEventListener('click', () => {
+            const open = items.some((d) => !d.open && !d.hidden);
+            items.forEach((d) => (d.open = open));
+            toggle.textContent = open ? toggle.dataset.close! : toggle.dataset.open!;
+          });
         </script>
-      </>
+      </section>
     )
   }
 
@@ -684,18 +776,49 @@ const heading = product?.data.shortName ?? title;
 
   {
     view === 'recipes' && (
-      <>
-        <h1>{title}</h1>
-        <Content />
-        <ul class="recipe-list">
-          {recipes.map((r) => (
-            <li>
-              <a href={recipeUrl(r)}>{r.data.title}</a>
-              {productBySlug(r.data.oil) && <span class="chip">{productBySlug(r.data.oil)!.data.shortName}</span>}
-            </li>
+      <section class="band paper">
+        <div class="wrap">
+          <header class="cookbook-head">
+            <h1>{title}</h1>
+            <div class="prose">
+              <Content />
+            </div>
+            <nav class="course-nav">
+              <ul class="chips">
+                {courses.map((c) => (
+                  <li>
+                    <a class="chip" href={`#${c.id}`}>
+                      {c.label} <span>{c.items.length}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </header>
+          {courses.map((c) => (
+            <section class="course" id={c.id}>
+              <h2 class="section-title">
+                <Sprig />
+                {c.label}
+              </h2>
+              <ul class="recipe-cards">
+                {c.items.map((r) => (
+                  <li>
+                    <a class="recipe-card" href={recipeUrl(r)}>
+                      <span class="recipe-card-title">{r.data.title}</span>
+                      {ingredientPreview(r) && <span class="recipe-card-ingredients">{ingredientPreview(r)} …</span>}
+                      <span class="recipe-card-meta">
+                        {r.data.servings && <span>{r.data.servings}</span>}
+                        {productBySlug(r.data.oil) && <span class="chip">{productBySlug(r.data.oil)!.data.shortName}</span>}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
-        </ul>
-      </>
+        </div>
+      </section>
     )
   }
 
@@ -734,7 +857,81 @@ const heading = product?.data.shortName ?? title;
   }
 
   {
-    ['about', 'press', 'links'].includes(view) && (
+    view === 'about' && (
+      <>
+        <section class="band paper">
+          <div class="wrap about-intro">
+            <div>
+              <p class="eyebrow">{t.since}</p>
+              <h1>{title}</h1>
+              {aboutStory && (
+                <>
+                  <h2 class="small-title">{aboutStory.title}</h2>
+                  <div class="prose about-story" set:html={aboutStory.html} />
+                </>
+              )}
+            </div>
+            {page.data.heroImage && (
+              <figure class="framed about-photo">
+                <img src={page.data.heroImage} alt="" width="800" height="600" />
+              </figure>
+            )}
+          </div>
+        </section>
+
+        {page.data.milestones && page.data.milestones.length > 0 && (
+          <section class="milestones on-dark">
+            <div class="wrap">
+              <h2>{t.ourStory}</h2>
+              <ol>
+                {page.data.milestones.map((m) => (
+                  <li>
+                    <span class="milestone-year">{m.year}</span>
+                    <span class="milestone-text">{m.text}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+        )}
+
+        {aboutRest.map((s, i) =>
+          s.short ? (
+            <section class="band mid">
+              <div class="wrap credo">
+                {s.photos[0] && (
+                  <figure class="framed">
+                    <img src={s.photos[0]} alt="" width="800" height="600" loading="lazy" />
+                  </figure>
+                )}
+                <div>
+                  <h2 class="small-title">{s.title}</h2>
+                  <div class="credo-text" set:html={s.html} />
+                </div>
+              </div>
+            </section>
+          ) : (
+            <section class="band paper">
+              <div class:list={['wrap', 'about-row', { flip: i % 2 === 1 }]}>
+                <div class="about-photos">
+                  {s.photos.map((src) => (
+                    <img src={src} alt="" width="800" height="600" loading="lazy" />
+                  ))}
+                </div>
+                <div class="prose">
+                  <h2>{s.title}</h2>
+                  <Fragment set:html={s.html} />
+                </div>
+              </div>
+            </section>
+          ),
+        )}
+      </>
+    )
+  }
+
+  {
+    ['press', 'links'].includes(view) && (
       <>
         <h1>{title}</h1>
         <Content />

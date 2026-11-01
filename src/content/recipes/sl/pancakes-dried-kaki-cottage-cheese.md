@@ -1,6 +1,7 @@
 ---
 title: Palačinke s posušenimi kakiji in skuto
 order: 15
+course: dessert
 oil: orange-oil
 ingredients: |-
   Za palačinke:

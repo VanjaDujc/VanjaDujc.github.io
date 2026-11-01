@@ -1,6 +1,7 @@
 ---
 title: Tostada with tomato
 order: 2
+course: starter
 ingredients: |-
   - four slices of whole wheat bread
   - 3 ripe tomatoes

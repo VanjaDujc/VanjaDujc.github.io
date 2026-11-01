@@ -1,6 +1,7 @@
 ---
 title: La bruschetta con il pomodoro (»Tostadas con tomate«, Spagna)
 order: 2
+course: starter
 servings: per 4 persone
 ingredients: |-
   - 4 pezzi del pane di pieno grano

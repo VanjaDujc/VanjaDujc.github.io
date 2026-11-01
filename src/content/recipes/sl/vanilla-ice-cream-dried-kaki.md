@@ -1,6 +1,7 @@
 ---
 title: Vaniljin sladoled s posušenimi kakiji v pomarančnem oljčnem olju
 order: 12
+course: dessert
 oil: orange-oil
 ingredients: |-
   - 400 gr vaniljinega sladoleda

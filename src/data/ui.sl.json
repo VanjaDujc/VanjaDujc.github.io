@@ -56,5 +56,16 @@
   "close": "Zapri",
   "previous": "Prejšnja",
   "next": "Naslednja",
-  "photoStrip": "Iz našega oljčnika"
+  "photoStrip": "Iz našega oljčnika",
+  "ourStory": "Naša pot",
+  "courseStarter": "Predjedi",
+  "coursePasta": "Testenine in rižote",
+  "courseMain": "Glavne jedi",
+  "courseDessert": "Sladice",
+  "searchFaq": "Poiščite vprašanje …",
+  "questionsCount": "vprašanj",
+  "openAll": "Odpri vse",
+  "closeAll": "Zapri vse",
+  "noResults": "Ni zadetkov.",
+  "questions": "Vprašanja"
 }

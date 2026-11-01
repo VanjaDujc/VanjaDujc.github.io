@@ -56,5 +56,16 @@
   "close": "Schließen",
   "previous": "Zurück",
   "next": "Weiter",
-  "photoStrip": "Aus unserem Olivenhain"
+  "photoStrip": "Aus unserem Olivenhain",
+  "ourStory": "Unser Weg",
+  "courseStarter": "Vorspeisen",
+  "coursePasta": "Pasta und Risotto",
+  "courseMain": "Hauptgerichte",
+  "courseDessert": "Desserts",
+  "searchFaq": "Fragen durchsuchen …",
+  "questionsCount": "Fragen",
+  "openAll": "Alle öffnen",
+  "closeAll": "Alle schließen",
+  "noResults": "Nichts gefunden.",
+  "questions": "Fragen"
 }

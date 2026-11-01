@@ -105,6 +105,16 @@ collections:
     fields:
       - { label: Naslov, name: title, widget: string, i18n: true }
       - { label: Vrstni red, name: order, widget: number, value_type: int, default: 100, i18n: duplicate }
+      - label: Vrsta jedi
+        name: course
+        widget: select
+        i18n: duplicate
+        default: main
+        options:
+          - { label: Predjedi, value: starter }
+          - { label: Testenine in rižote, value: pasta }
+          - { label: Glavne jedi, value: main }
+          - { label: Sladice, value: dessert }
       - label: Najbolje se poda (olje)
         name: oil
         widget: relation
@@ -191,8 +201,34 @@ collections:
           - { label: Dodatno besedilo, name: body, widget: markdown, required: false, i18n: true }
 
       - name: about
-        label: O nas (več o tem)
+        label: O nas
         file: src/content/pages/{{locale}}/about.md
+        i18n: true
+        fields:
+          - { label: Naslov, name: title, widget: string, i18n: true }
+          - { label: Opis za Google, name: description, widget: text, required: false, i18n: true }
+          - { label: Fotografija ob uvodu, name: heroImage, widget: image, required: false, i18n: duplicate, media_folder: /public/images/gallery, public_folder: /images/gallery }
+          - label: Naša pot (časovnica)
+            name: milestones
+            widget: list
+            required: false
+            i18n: true
+            summary: "{{year}} – {{text}}"
+            fields:
+              - { label: Leto, name: year, widget: string }
+              - { label: Besedilo, name: text, widget: string }
+          - label: Besedilo
+            name: body
+            widget: markdown
+            required: false
+            i18n: true
+            media_folder: /public/images/gallery
+            public_folder: /images/gallery
+            hint: Vsak razdelek naj se začne z "Naslov 2" (##). Fotografije v razdelku se prikažejo ob besedilu; kratek razdelek se prikaže kot velik citat.
+
+      - name: awards
+        label: Priznanja (uvod)
+        file: src/content/pages/{{locale}}/awards.md
         i18n: true
         fields: &basic_page
           - { label: Naslov, name: title, widget: string, i18n: true }
@@ -211,7 +247,6 @@ collections:
           - { label: "Levi stolpec: kje kupiti", name: sidebar, widget: markdown, required: false, i18n: true }
           - { label: Besedilo pod seznamom izdelkov, name: body, widget: markdown, required: false, i18n: true }
 
-      - { name: awards, label: Priznanja (uvod), file: "src/content/pages/{{locale}}/awards.md", i18n: true, fields: *basic_page }
       - { name: press, label: Drugi o nas, file: "src/content/pages/{{locale}}/press.md", i18n: true, fields: *basic_page }
       - name: faq
         label: Pogosta vprašanja
@@ -318,3 +353,14 @@ collections:
           - { label: "Galerija: Prejšnja", name: previous, widget: string, i18n: true }
           - { label: "Galerija: Naslednja", name: next, widget: string, i18n: true }
           - { label: "Domača stran: trak fotografij", name: photoStrip, widget: string, i18n: true }
+          - { label: "O nas: naslov časovnice", name: ourStory, widget: string, i18n: true }
+          - { label: "Recepti: predjedi", name: courseStarter, widget: string, i18n: true }
+          - { label: "Recepti: testenine in rižote", name: coursePasta, widget: string, i18n: true }
+          - { label: "Recepti: glavne jedi", name: courseMain, widget: string, i18n: true }
+          - { label: "Recepti: sladice", name: courseDessert, widget: string, i18n: true }
+          - { label: "Vprašanja: iskalno polje", name: searchFaq, widget: string, i18n: true }
+          - { label: "Vprašanja: beseda za število (npr. vprašanj)", name: questionsCount, widget: string, i18n: true }
+          - { label: "Vprašanja: Odpri vse", name: openAll, widget: string, i18n: true }
+          - { label: "Vprašanja: Zapri vse", name: closeAll, widget: string, i18n: true }
+          - { label: "Vprašanja: ni zadetkov", name: noResults, widget: string, i18n: true }
+          - { label: "Vprašanja: naslov kazala", name: questions, widget: string, i18n: true }

@@ -1,6 +1,7 @@
 ---
 title: Penne Rigate (Nudeln) Brokkoli, Blumenkohl und Käse Peccorino
 order: 9
+course: pasta
 ingredients: |-
   - 500g Penne Rigate (Nudeln)
   - ½ Kopf Blumenkohl

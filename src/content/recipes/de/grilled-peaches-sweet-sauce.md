@@ -1,6 +1,7 @@
 ---
 title: Gegrillten Pfirsichen mit süßem Guss
 order: 14
+course: dessert
 oil: orange-oil
 ingredients: |-
   - 4 reife Pfirsichen

@@ -1,6 +1,7 @@
 ---
 title: Cacciuco mit Tintenfisch
 order: 11
+course: main
 ingredients: |-
   - 1 kg frischen Tintenfischen
   - 8 Kartoffeln

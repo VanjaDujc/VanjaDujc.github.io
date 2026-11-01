@@ -1,6 +1,7 @@
 ---
 title: Istrian home made bread with seeds
 order: 16
+course: starter
 ingredients: |-
   - 250g whole wheat flour
   - 250g white flour

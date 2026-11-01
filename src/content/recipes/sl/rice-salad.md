@@ -1,6 +1,7 @@
 ---
 title: Riževa solata
 order: 3
+course: starter
 oil: orange-oil
 servings: za štiri osebe
 ingredients: |-

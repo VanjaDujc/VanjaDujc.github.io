@@ -1,6 +1,7 @@
 ---
 title: Bruskete z zelišči (Istra)
 order: 5
+course: starter
 servings: za štiri osebe
 ingredients: |-
   - pol francoske štruce

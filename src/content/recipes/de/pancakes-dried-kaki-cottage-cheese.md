@@ -1,6 +1,7 @@
 ---
 title: Pfannkuchen mit getrockneten Kakipflaumen
 order: 15
+course: dessert
 oil: orange-oil
 ingredients: |-
   Für Pfannkuchen:

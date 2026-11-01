@@ -1,6 +1,7 @@
 ---
 title: Reissalat
 order: 3
+course: starter
 oil: orange-oil
 ingredients: |-
   - 2 Tassen Reis

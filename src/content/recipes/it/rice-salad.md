@@ -1,6 +1,7 @@
 ---
 title: L'insalata al riso
 order: 3
+course: starter
 oil: orange-oil
 servings: per quattro persone
 ingredients: |-

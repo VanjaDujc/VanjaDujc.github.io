@@ -1,6 +1,7 @@
 ---
 title: Il gelato di vaniglia con le mele d'oro secche nell'olio d'oliva di arance
 order: 12
+course: dessert
 oil: orange-oil
 ingredients: |-
   - 400 gr del gelato di vaniglia

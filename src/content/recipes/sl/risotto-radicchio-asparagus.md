@@ -1,6 +1,7 @@
 ---
 title: Rižota z radičem Tarvisio in šparglji
 order: 7
+course: pasta
 ingredients: |-
   - 2 skodelici riža
   - 2 glavi radiča Tarvisio

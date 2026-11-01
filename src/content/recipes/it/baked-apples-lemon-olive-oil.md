@@ -1,6 +1,7 @@
 ---
 title: Le mele arrostite con l'olio d'oliva di limone
 order: 13
+course: dessert
 oil: lemon-oil
 ingredients: |-
   - 4 mele

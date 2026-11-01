@@ -1,6 +1,7 @@
 ---
 title: Pomaranča z oljčnim oljem (»Naranja con aceite de oliva«, Španija)
 order: 4
+course: starter
 servings: za štiri osebe
 ingredients: |-
   - 2 pomaranči

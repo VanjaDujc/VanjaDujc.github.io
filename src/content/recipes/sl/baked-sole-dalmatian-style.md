@@ -1,6 +1,7 @@
 ---
 title: Pečeni listi s krompirjem na dalmatinski način
 order: 10
+course: main
 oil: lemon-oil
 ingredients: |-
   Za liste:

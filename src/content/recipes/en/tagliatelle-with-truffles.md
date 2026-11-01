@@ -1,6 +1,7 @@
 ---
 title: Tagliatelle with truffles
 order: 8
+course: pasta
 ingredients: |-
   - 500 gr taglatelle pasta
   - 2 fresh or frozen truffles

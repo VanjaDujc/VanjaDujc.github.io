@@ -1,6 +1,7 @@
 ---
 title: Risotto with radicchio rosso di Treviso and asparagus
 order: 7
+course: pasta
 ingredients: |-
   - 2 cups rice
   - 200 gr fresh young asparagus stalks

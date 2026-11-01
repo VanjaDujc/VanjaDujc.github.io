@@ -1,6 +1,7 @@
 ---
 title: Bruscete mit Kräutern (Istrien)
 order: 5
+course: starter
 servings: für 4 Personen
 ingredients: |-
   - Halbe Stangenbrot

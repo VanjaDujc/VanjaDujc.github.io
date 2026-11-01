@@ -1,6 +1,7 @@
 ---
 title: '"Cacciucco Vanja" with potatoes on the Istrian way'
 order: 11
+course: main
 ingredients: |-
   For cacciucco:
 

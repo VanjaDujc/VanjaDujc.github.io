@@ -1,6 +1,7 @@
 ---
 title: Penne with broccoli, cauliflower and pecorino cheese
 order: 9
+course: pasta
 ingredients: |-
   - 500 gr penne rigate pasta
   - ½ head of cauliflower

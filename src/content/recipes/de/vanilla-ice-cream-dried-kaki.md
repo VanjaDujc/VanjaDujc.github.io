@@ -1,6 +1,7 @@
 ---
 title: Vanjas Eis mit getrockneten Kakipflaumen in Orangen-Olivenöl
 order: 12
+course: dessert
 oil: orange-oil
 ingredients: |-
   - 400 g Vanillezucker

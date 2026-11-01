@@ -1,6 +1,7 @@
 ---
 title: Le bruschette con specie (Istria)
 order: 5
+course: starter
 servings: per quattro persone
 ingredients: |-
   - metà finoncino di pane francese

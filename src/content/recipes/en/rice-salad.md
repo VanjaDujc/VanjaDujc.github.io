@@ -1,6 +1,7 @@
 ---
 title: Rice salad
 order: 3
+course: starter
 oil: orange-oil
 ingredients: |-
   - 2 cups of rice

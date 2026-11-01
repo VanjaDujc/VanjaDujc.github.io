@@ -1,6 +1,7 @@
 ---
 title: Cacciuco con le seppie
 order: 11
+course: main
 servings: per quattro persone
 ingredients: |-
   - un chilo di seppie fresche

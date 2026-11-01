@@ -1,6 +1,7 @@
 ---
 title: Grilled soles with potatoes "a la Robi"
 order: 10
+course: main
 oil: lemon-oil
 ingredients: |-
   For grilled soles:

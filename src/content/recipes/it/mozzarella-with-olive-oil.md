@@ -1,6 +1,7 @@
 ---
 title: Mozzarella con l'olio d'oliva
 order: 6
+course: starter
 servings: per quattro persone
 ingredients: |-
   - 200 gr di mozzarella

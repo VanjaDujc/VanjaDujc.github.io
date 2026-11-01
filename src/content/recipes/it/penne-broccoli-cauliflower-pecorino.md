@@ -1,6 +1,7 @@
 ---
 title: Le penne coi broccoli, coi carciofi e col formaggio pecorino
 order: 9
+course: pasta
 ingredients: |-
   - 500 gr delle penne
   - metà del carciofo

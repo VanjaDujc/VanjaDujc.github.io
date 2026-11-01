@@ -1,6 +1,7 @@
 ---
 title: Pečena jabolka z limoninim oljčnim oljem
 order: 13
+course: dessert
 oil: lemon-oil
 ingredients: |-
   - 4 jabolka

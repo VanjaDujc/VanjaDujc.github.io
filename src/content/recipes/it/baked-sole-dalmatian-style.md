@@ -1,6 +1,7 @@
 ---
 title: I fogli arrostiti con patate alla dalmata
 order: 10
+course: main
 oil: lemon-oil
 ingredients: |-
   Per i fogli:

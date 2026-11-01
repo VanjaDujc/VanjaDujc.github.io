@@ -1,6 +1,7 @@
 ---
 title: Mozzarella mit Olivenöl
 order: 6
+course: starter
 servings: für 4 Personen
 ingredients: |-
   - 200g Mozzarella

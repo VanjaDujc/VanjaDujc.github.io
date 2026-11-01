@@ -1,6 +1,7 @@
 ---
 title: Istrian bruschetta with garlic and oregano
 order: 5
+course: starter
 ingredients: |-
   - white bread
   - 3-4 cloves of garlic

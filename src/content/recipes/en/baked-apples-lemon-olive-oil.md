@@ -1,6 +1,7 @@
 ---
 title: Roasted apples with honey and lemon flavoured olive oil
 order: 13
+course: dessert
 oil: lemon-oil
 ingredients: |-
   - 4 apples

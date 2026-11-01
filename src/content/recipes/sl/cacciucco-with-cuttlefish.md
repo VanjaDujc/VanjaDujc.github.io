@@ -1,6 +1,7 @@
 ---
 title: Cacciuco s sipami
 order: 11
+course: main
 servings: za štiri osebe
 ingredients: |-
   - 1 kg svežih sip

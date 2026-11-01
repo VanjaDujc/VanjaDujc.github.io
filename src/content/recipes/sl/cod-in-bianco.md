@@ -1,6 +1,7 @@
 ---
 title: Bakalar »in bianco« a la Vanja Dujc
 order: 1
+course: main
 ingredients: |-
   - 500 gr sušenega bakalarja (polenovke)
   - 3 listi svežega lovorja

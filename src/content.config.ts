@@ -28,6 +28,8 @@ const pages = defineCollection({
     // "this year's harvest" box on the home page, hidden while empty
     harvestTitle: z.string().optional(),
     harvestText: z.string().optional(),
+    // about page: short timeline
+    milestones: z.array(z.object({ year: z.string(), text: z.string() })).optional(),
     // photo strip on the home page
     photos: z.array(z.string()).optional(),
     // gallery page
@@ -60,6 +62,7 @@ const recipes = defineCollection({
   schema: z.object({
     title: z.string(),
     order: z.number().default(0),
+    course: z.enum(['starter', 'pasta', 'main', 'dessert']).default('main'),
     // product that suits the recipe best, e.g. "orange-oil"
     oil: z.string().optional(),
     servings: z.string().optional(),

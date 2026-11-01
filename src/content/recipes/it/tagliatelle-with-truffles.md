@@ -1,6 +1,7 @@
 ---
 title: Tagliatelle con tartuffi
 order: 8
+course: pasta
 ingredients: |-
   - 500 gr delle tagliatelle
   - due tartuffi freschi o congelati

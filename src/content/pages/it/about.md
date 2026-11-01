@@ -1,25 +1,37 @@
 ---
 title: La presentazione
 sideImage: /images/sidebar/bottle-2.jpg
+heroImage: /images/gallery/r-22-alenka.jpg
+milestones:
+  - year: "1984"
+    text: In estate Vanja pianta i primi seicento ulivi.
+  - year: "1985"
+    text: D’inverno il gelo distrugge tutto l’impianto – Vanja non si perde d’animo e ripianta.
+  - year: "2000"
+    text: Vanja si dedica completamente all’olivicoltura.
+  - year: "2003"
+    text: "Il primo premio importante: il Diploma d’eccellenza al Sol di Verona."
+  - year: "2006"
+    text: La figlia Lena inizia a lavorare nella fattoria.
+  - year: "2010"
+    text: Campione del mondo al primo campionato mondiale degli oli d’oliva, EXPO 2010 a Shanghai.
+  - year: Oggi
+    text: 1050 alberi su 3,5 ettari di terrazze sulla Mala Seva.
 ---
 
-**Chi siamo?**
+## Chi siamo?
 
 Il cuore della fattoria di Vanja Dujc: »professore« e »guru dell'olio di oliva« come lo ha chiamato il settimanale austriaco Profil. Nel 1984 a causa dell'incerto futuro di economia nella ex-Jugoslavia immagina come ruota di ricambio un oliveto. Nell'estate del 1984 pianta i primi sei cento alberi senza sapere molto al di più che le olive sotto aceto (in conserva) hanno un sapore salato che è gradevole. Durante l'inverno prossimo tutto l'impianto è distrutto dal gelo. Nonostante l'accaduto non si perde d'animo, impianta dei nuovi alberi e col passare degli anni l'oliveto s'ingrandisce fino ai 1050 alberi di oggi. L'olivicoltura che all'inizio presenta solo un passatempo diventa una vera passione con la quale pian piano Vanja contagia anche altri membri della famiglia: moglie Vesna, figlio Luka e nuora Martina, figlia Lena e genero Robi. Con gli anni Vanja viene a conclusione che dovrebbe totalmente dedicarsi all'olivicoltura se vuole produrre l'olio che sarà della prima qualità e questo succede nel 2000. Nel 2003 il suo olio d'oliva riceve il primo premio importante: La diploma d'eccelenza alla competizione Sol a Verona. A partire dal 2003 i premi e le medaglie diventano la tendenza della famiglia Dujc. Alla fine del 2006 la fattoria impiega figlia Lena. Nascono delle nuove idee, l'offerta degli oli e altri prodotti viene allargata. La meta rimane la stessa: produrre il migliore olio d'oliva. Quando c'è bisogno vengono in aiuto Luka e Robi, se hanno tempo e dei sogni a disposizione anche altri membri della famiglia.  
 
----
+## Le principali linee direttrici della nostra attività
 
-**Le principali linee direttrici della nostra attività**
-
-![](/images/photos/sunset.jpg)
+![](/images/gallery/r-02-zelena.jpg)
 
 La coltivazione gentile alla natura, l'offerta  ricca e ingegnosa, la gestione esemplare.
 
----
+## Il saper fare e l'esperienza
 
-**Il saper fare e l'esperienza**
-
-![](/images/photos/olives.jpg)
+![](/images/gallery/r-19-ana-magda.jpg)
 
 Ci appoggiamo al sapere dei noti esperti sul campo dell'olivicoltura (Alessandro Morettini, Claudio Cantini, Riccardo Gucci, Rugero Petacchi, Pavle Bakarič, Stanko Štambuk, France Adamič, Luigi Braconi) e anche al sapere raggiunto ai seminari tecnici in Slovenia, Croazia e Italia.
 
@@ -37,13 +49,11 @@ Ricca e propria esperienza garantisce la qualità:
 
 Siamo tra i membri costitutivi dell'Associazione d'olivicoltura Štorta, dell'Associazione dei produttori dell' olio d'oliva di Slovenia, La cooperativa d'olivicoltura Oleum Nostrum, i membri del DOSI – L'Associazione degli olivicoltori dell'Istria slovena e i membri costitutivi EX OLEA, l'associazione internazionale degli olivicoltori dell'olio d'oliva di prima qualità.
 
----
+## Il nostro oliveto e olio d'oliva
 
-**Il nostro oliveto e olio d'oliva**
+![](/images/gallery/r-27-odvoz.jpg)
 
-![](/images/photos/orchard.jpg)  
-
-![](/images/photos/orchard-2.jpg)
+![](/images/gallery/r-05-crna.jpg)
 
 L'oliveto giace (si trova) sui pendii al sud ovest di Mala Seva sopra Portorose, abitato turistico alla costa slovena. Sui terrazzi di superficie 3,5 ettari crescono 1050 alberi tra 8 e 21 anni. La posizione del terreno, la qualità della terra e l'atmosfera pura e ventosa rappresentano le condizioni migliori per gli olivi. Ci siamo decisi per una vasta scelta delle specie. Tra varie specie predominano Bianchera,  Leccino, Maurino e Itrana, seguono Pendolino, Leccio, Leccio di corno, Frantoio, Moraiolo, Buga piranese, Giugiola piranese; tra le specie da tavola Ascolana tenera, Santa Caterina e anche Storta piranese. Favorevoli condizioni naturali, buona scelta delle specie, sapienza e lavoro accurato garantiscono ottima qualità dei nostri prodotti.
 

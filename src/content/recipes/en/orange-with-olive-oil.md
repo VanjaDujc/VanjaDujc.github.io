@@ -1,6 +1,7 @@
 ---
 title: Sliced orange with sheep cheese
 order: 4
+course: starter
 ingredients: |-
   - 2 oranges
   - 100 g sheep cheese

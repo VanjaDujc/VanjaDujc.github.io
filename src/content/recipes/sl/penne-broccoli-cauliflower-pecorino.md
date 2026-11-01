@@ -1,6 +1,7 @@
 ---
 title: Peresniki z brokoli, cvetačo in sirom peccorino
 order: 9
+course: pasta
 ingredients: |-
   - 500 g testenin peresniki
   - ½ glave cvetače
